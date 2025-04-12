@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&display=swap');
+@import "tailwindcss";
+
+/* General */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "National Park", sans-serif;
+    font-weight: 600;
+}
+
+/* Custom */
+.cont {
+    width: 100%;
+    max-width: 1550px;
+    margin: 0 auto;
+}
+
+.box-padding {
+    padding: 10px 25px;
+}
+
+/* Links */
+.nav-link {
+    position: relative;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+
+    &::before {
+        content: "";
+        height: 3px;
+        background-color: black;
+        position: absolute;
+        right: 100%;
+        bottom: 0;
+        left: 0;
+        transition: 0.3s ease-in-out;
+    }
+
+    &:hover::before {
+        right: 0;
+    }
+}
+
+.nav-link-active {
+    position: relative;
+    padding: 5px;
+
+    &::before {
+        content: "";
+        height: 3px;
+        background-color: black;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        transition: 0.2s ease-in-out;
+    }
+}
+
+.menu-btn {
+    display: none;
+}
+
+
+.aside-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    background-color: transparent;
+    padding: 3px 5px;
+    border-radius: 5px;
+    transition: background-color .2s ease-in-out;
+}
+
+.aside-link.active {
+    background-color: #1447E6;
+    color: white;
+}
+
+/* inputs */
+.input-block {
+    margin-bottom: 10px;
+}
+
+.input-block,
+.submit-btn {
+    width: 100%;
+    height: 35px;
+}
+
+.form-input {
+    height: 100%;
+    width: 100%;
+    border: solid 2px black;
+    padding: 3px 7px;
+    outline: none;
+    font-size: 16px;
+    font-weight: 500;
+
+    &::placeholder {
+        font-size: 14px;
+    }
+}
+
+.line {
+    &::before {
+        content: '';
+        position: absolute;
+        height: 2px;
+        background-color: black;
+        top: 54%;
+        transform: translateY(-50%);
+        width: 45%;
+        left: 0;
+    }
+    &::after {
+        content: '';
+        position: absolute;
+        height: 2px;
+        background-color: black;
+        top: 54%;
+        transform: translateY(-50%);
+        width: 45%;
+        right: 0;
+    }
+}
+
+.social-media ul li {
+    position: relative;
+    z-index: 1;
+    border: solid 2px black;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: 0.2s;
+
+    &:hover {
+        color: white;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        background-color: black;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 100%;
+        z-index: 0;
+        transition: 0.2s;
+    }
+
+    &:hover::before {
+        right: 0;
+        z-index: 0;
+    }
+
+    * {
+        position: relative;
+        z-index: 1;
+    }
+}
+
+
+/* Media Queries */
+@media screen and (max-width: 600px) {
+
+    .nav-links {
+        display: none;
+    }
+
+    .menu-btn {
+        display: initial;
+    }
+
+    .box-padding {
+        padding: 10px;
+    }
+}
