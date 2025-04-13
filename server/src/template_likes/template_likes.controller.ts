@@ -7,6 +7,11 @@ export class TemplateLikesController {
 
     constructor(private readonly templateLikesService: TemplateLikesService) {}
 
+    @Get('all-likes')
+    allLikes() {
+        return this.templateLikesService.allLikes()
+    }
+
     @Get()
     @UseGuards(JwtAuthGuard)
     findAll(@Req() req) {
@@ -19,7 +24,6 @@ export class TemplateLikesController {
     }
 
     @Get('count/:templateId')
-    @UseGuards(JwtAuthGuard)
     count(@Param('templateId') templateId: number) {
         return this.templateLikesService.countLikes(templateId);
     }

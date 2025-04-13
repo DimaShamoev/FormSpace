@@ -24,6 +24,15 @@ body {
     padding: 10px 25px;
 }
 
+.sm-padding_1 {
+    padding: 7px;
+}
+
+.right-padding_1 {
+    padding-right: 30px;
+}
+
+/* Header */
 /* Links */
 .nav-link {
     position: relative;
@@ -83,6 +92,7 @@ body {
     color: white;
 }
 
+/* sing-in || sing-up forms */
 /* inputs */
 .input-block {
     margin-bottom: 10px;
@@ -171,6 +181,11 @@ body {
         position: relative;
         z-index: 1;
     }
+}
+
+/* Templates Component */
+.templates-container {
+    margin: 20px 0 0 0;
 }
 
 

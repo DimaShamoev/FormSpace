@@ -11,22 +11,15 @@ export class TemplateService {
         @InjectRepository(Template) private readonly templateRepository: Repository<Template>,
     ) {}
 
-    async create(createTemplateDto: CreateTemplateDto, id: number) {
-        const templateExist = await this.templateRepository.findOne({
-            where: {
-                title: createTemplateDto.title,
-            },
-        });
-
-        if (templateExist) throw new BadRequestException('This Template Already Exist');
-
-        const newTemplate = {
-            ...createTemplateDto,
-            user: { id },
-            tags: [{ id: +createTemplateDto.tags }]
-        };
-
-        return await this.templateRepository.save(newTemplate);
+    async allTemplates() {
+        return this.templateRepository.find({
+            relations: {
+                user: true,
+                templateLikes: true,
+                tags: true,
+                template_responses: true
+            }
+        })
     }
 
     async findAll(id: number) {
@@ -51,6 +44,24 @@ export class TemplateService {
                 templateLikes: true
             },
         });
+    }
+
+    async create(createTemplateDto: CreateTemplateDto, id: number) {
+        const templateExist = await this.templateRepository.findOne({
+            where: {
+                title: createTemplateDto.title,
+            },
+        });
+
+        if (templateExist) throw new BadRequestException('This Template Already Exist');
+
+        const newTemplate = {
+            ...createTemplateDto,
+            user: { id },
+            tags: [{ id: +createTemplateDto.tags }]
+        };
+
+        return await this.templateRepository.save(newTemplate);
     }
 
     async update(id: number, updateTemplateDto: UpdateTemplateDto) {

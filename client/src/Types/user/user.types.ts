@@ -36,3 +36,16 @@ export interface IResponseUserData {
     token: string
     user: IResponseUser
 }
+
+export interface IUserInfo {
+    id: number
+    first_name: string;
+    last_name: string;
+    email: string
+}
+
+export interface ICurrentUser {
+    id: number
+    email: number
+    token: string
+}

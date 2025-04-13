@@ -6,36 +6,41 @@ import { JwtAuthGuard } from 'src/auth/Guards/jwt-auth.guard';
 
 @Controller('templates')
 export class TemplateController {
-  constructor(private readonly templateService: TemplateService) {}
+    constructor(private readonly templateService: TemplateService) {}
 
-  @Post()
-  @UseGuards(JwtAuthGuard)
-  @UsePipes(new ValidationPipe())
-  create(@Body() createTemplateDto: CreateTemplateDto, @Req() req) {
-    return this.templateService.create(createTemplateDto, +req.user.id);
-  }
+    @Get('all-templates')
+    allTemplates() {
+        return this.templateService.allTemplates()    
+    }
 
-  @Get()
-  @UseGuards(JwtAuthGuard)
-  findAll(@Req() req) {
-    return this.templateService.findAll(+req.user.id);
-  }
+    @Get()
+    @UseGuards(JwtAuthGuard)
+    findAll(@Req() req) {
+        return this.templateService.findAll(+req.user.id);
+    }
 
-  @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  findOne(@Param('id') id: string) {
-    return this.templateService.findOne(+id);
-  }
+    @Get(':id')
+    @UseGuards(JwtAuthGuard)
+    findOne(@Param('id') id: string) {
+        return this.templateService.findOne(+id);
+    }
 
-  @Patch(':id')
-  @UseGuards(JwtAuthGuard)
-  update(@Param('id') id: string, @Body() updateTemplateDto: UpdateTemplateDto) {
-    return this.templateService.update(+id, updateTemplateDto);
-  }
+    @Post()
+    @UseGuards(JwtAuthGuard)
+    @UsePipes(new ValidationPipe())
+    create(@Body() createTemplateDto: CreateTemplateDto, @Req() req) {
+        return this.templateService.create(createTemplateDto, +req.user.id);
+    }
 
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard)
-  remove(@Param('id') id: string) {
-    return this.templateService.remove(+id);
-  }
+    @Patch(':id')
+    @UseGuards(JwtAuthGuard)
+    update(@Param('id') id: string, @Body() updateTemplateDto: UpdateTemplateDto) {
+        return this.templateService.update(+id, updateTemplateDto);
+    }
+
+    @Delete(':id')
+    @UseGuards(JwtAuthGuard)
+    remove(@Param('id') id: string) {
+        return this.templateService.remove(+id);
+    }
 }

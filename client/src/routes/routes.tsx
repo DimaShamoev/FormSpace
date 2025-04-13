@@ -9,6 +9,7 @@ import SignUp from "../pages/SignUp";
 import SingIn from "../pages/SingIn";
 import ProtectedRoute from "../components/pageProtectors/ProtectedRoute";
 import ProtectedRouteAdmin from "../components/pageProtectors/ProtectedRouteAdmin";
+import CreateTemplate from "../pages/CreateTemplate";
 
 export const routes = createBrowserRouter([
     {
@@ -18,11 +19,15 @@ export const routes = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <ProtectedRoute><Home /></ProtectedRoute>
+                element: <Home />
             },
             {
                 path: 'profile',
                 element: <ProtectedRoute><Profile /></ProtectedRoute>
+            },
+            {
+                path: 'create-template',
+                element: <ProtectedRoute><CreateTemplate /></ProtectedRoute>
             },
             {
                 path: 'template/:id',

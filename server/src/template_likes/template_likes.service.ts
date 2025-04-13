@@ -13,6 +13,15 @@ export class TemplateLikesService {
         @InjectRepository(User) private readonly userRepository: Repository<User>,
     ) {}
 
+    async allLikes() {
+        return this.templateLikeRepository.find({
+            relations: {
+                user: true,
+                template: true,
+            }
+        })
+    }
+
     async findAll(id: number) {
         return await this.templateLikeRepository.find({
             where: {
@@ -34,9 +43,14 @@ export class TemplateLikesService {
     }
 
     async countLikes(templateId: number) {
-        return this.templateLikeRepository.count({
-          where: { template: { id: templateId } },
+        
+        const count = await this.templateLikeRepository.count({
+          where: { 
+            template: { id: templateId }
+        },
         });
+
+        return count
     }
 
     async likeTemplate(userId: number, templateId: number) {
@@ -53,7 +67,10 @@ export class TemplateLikesService {
         });
 
         const existing = await this.templateLikeRepository.findOne({
-            where: { user: { id: userId }, template: { id: templateId } },
+            where: { 
+                user: { id: userId },
+                template: { id: templateId }
+            },
         });
 
         if (!user) throw new BadRequestException("User not found");

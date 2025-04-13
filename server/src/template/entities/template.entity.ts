@@ -26,7 +26,7 @@ export class Template {
     user: User
 
     @OneToMany(() => TemplateResponse, templateResponse => templateResponse.template)
-    template_response: TemplateResponse[]
+    template_responses: TemplateResponse[]
 
     @OneToMany(() => TemplateLike, templateLike => templateLike.template)
     templateLikes: TemplateLike[]

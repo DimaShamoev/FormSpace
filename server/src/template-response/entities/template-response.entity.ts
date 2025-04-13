@@ -14,7 +14,7 @@ export class TemplateResponse {
     @JoinColumn({ name: 'user_id' })
     user: User
 
-    @ManyToOne(() => Template, template => template.template_response)
+    @ManyToOne(() => Template, template => template.template_responses)
     @JoinColumn({ name: 'template_id' })
     template: Template
 
