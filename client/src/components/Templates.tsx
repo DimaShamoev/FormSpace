@@ -9,22 +9,15 @@ import { HiDotsHorizontal } from "react-icons/hi"
 import { FaRegHeart } from "react-icons/fa6"
 import { LuNotebookPen } from "react-icons/lu"
 
-const Templates: React.FunctionComponent = () => {
+interface TemplatesProps {
+    templates: ITemplate[]
+}
 
-    const [templates, setTemplates] = useState<ITemplate[]>([])
+const Templates: React.FunctionComponent<TemplatesProps> = ({ templates }) => {
+
     const isAuth = useAuth()
     const { isAuthor } = useAuthor()
     const { isAdmin } = useRole()
-
-    const getData = async () => {
-
-        const template = await request.get<ITemplate[]>('templates/all-templates')
-        setTemplates(template.data)
-    }
-
-    useEffect(() => {
-        getData()
-    }, [])
 
     return (
         <div className="templates-container flex flex-col gap-5">
@@ -68,18 +61,13 @@ const Templates: React.FunctionComponent = () => {
                                     View Full
                                 </Link>
                             </div>
+                            <span>{ template.id }</span>
 
                         </div>
-
-                        {/* <div className="id text-xs">
-                            <span className="text-xs opacity-10">
-                                id - {template.id} // user - {template.user.first_name}
-                            </span>
-                        </div> */}
                     </div>
                 )))
             ) : (
-                <p>no data</p>
+                <p className="text-lg text-red-500">Something Went Wrong ☹️😥</p>
             ) }
         </div>
     )

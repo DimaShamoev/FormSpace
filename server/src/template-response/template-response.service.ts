@@ -36,8 +36,8 @@ export class TemplateResponseService {
         });
     }
 
-    async create(createTemplateResponseDto: CreateTemplateResponseDto, userId: number) {
-        const { templateId, answers } = createTemplateResponseDto;
+    async create(createTemplateResponseDto: CreateTemplateResponseDto, templateId: number, userId: number) {
+        const { answers } = createTemplateResponseDto;
     
         const template = await this.templateRepository.findOne({ where: { id: templateId } });
         if (!template) {

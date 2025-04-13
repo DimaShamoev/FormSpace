@@ -22,11 +22,11 @@ export class TemplateResponseController {
         return this.templateResponseService.findOne(+id);
     }
 
-    @Post()
+    @Post(':templateId')
     @UseGuards(JwtAuthGuard)
     @UsePipes(new ValidationPipe())
-    create(@Body() createTemplateResponseDto: CreateTemplateResponseDto, @Req() req) {
-        return this.templateResponseService.create(createTemplateResponseDto, req.user.id);
+    create(@Body() createTemplateResponseDto: CreateTemplateResponseDto, @Param('templateId') templateId: number, @Req() req) {
+        return this.templateResponseService.create(createTemplateResponseDto, templateId, req.user.id);
     }
 
     @Patch(':id')

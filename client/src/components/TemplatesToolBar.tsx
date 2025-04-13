@@ -1,14 +1,30 @@
 import { IoSearch } from "react-icons/io5"
 import { Link } from "react-router-dom"
 
-const TemplatesToolBar: React.FunctionComponent = () => {
+interface TemplatesToolBarProps {
+    sortByLikes: () => void,
+    sortByResponses: () => void
+}
+
+const TemplatesToolBar: React.FunctionComponent<TemplatesToolBarProps> = ({ sortByLikes, sortByResponses }) => {
     return (
         <div className="bg-white flex justify-between items-center box-padding">
             <div className="buttons">
                 <ul className="flex items-center gap-5">
                     <Link to='create-template' className="text-sm bg-blue-700 sm-padding_1 text-white rounded-md">create</Link>
-                    <li className="text-sm cursor-pointer">sort By Likes</li>
-                    <li className="text-sm cursor-pointer">Sort By Answers</li>
+                    <li
+                        className="text-sm cursor-pointer"
+                        onClick={sortByLikes}
+                    >
+                        sort By Likes
+                    </li>
+
+                    <li
+                        className="text-sm cursor-pointer"
+                        onClick={sortByResponses}
+                    >
+                        Sort By Responses
+                    </li>
                 </ul>
             </div>
             <div className="relative search flex flex-row-reverse">

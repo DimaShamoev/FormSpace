@@ -1,87 +1,36 @@
 import TemplatesToolBar from "../components/TemplatesToolBar";
 import Templates from "../components/Templates";
-
-// interface IUser {
-//     id: number;
-//     first_name: string;
-//     last_name: string;
-//     email: string;
-//     password: string;
-//     role: string;
-//     createdAt: string;
-//     updatedAt: string;
-// }
-
-// interface ILikes {
-//     id: number;
-//     template_id: number;
-//     user_id: number;
-// }
-
-// interface ITemplate {
-//     id: number;
-//     title: string;
-//     description: string;
-//     questions: string[];
-//     answers: string[];
-//     user: IUser;
-//     likes: ILikes[];
-//     createdAt: number;
-// }
+import { useEffect, useState } from "react";
+import { ITemplate } from "../Types/templates/templates.types";
+import { request } from "../api/axios.api";
 
 const Home = () => {
-    // const [templates, setTemplates] = useState<ITemplate[]>([]);
-    // const [likesCount, setLikesCount] = useState<{ [key: number]: number }>({});
 
-    // const getTemplates = async () => {
-    //     const response = await request.get<ITemplate[]>('templates/all-templates');
-    //     setTemplates(response.data);
-    
-    //     const likeCounts: { [key: number]: number } = {};
-    
-    //     for (const template of response.data) {
-    //         try {
-    //             const likeResponse = await request.get<{ data: number }>(`template-likes/count/${template.id}`);
-    
-    //             if (typeof likeResponse.data === "number") {
-    //                 likeCounts[template.id] = likeResponse.data;
-    //             }
-    //         } catch (error) {
-    //             alert(error)
-    //         }
-    //     }
-    
-    //     setLikesCount(likeCounts);
-    // };
+    const [templates, setTemplates] = useState<ITemplate[]>([])
 
-    // useEffect(() => {
-    //     getTemplates();
-    // }, []);
+    const getData = async () => {
+        const template = await request.get<ITemplate[]>('templates/all-templates')
+        setTemplates(template.data)
+    }
+
+    const sortByLikes = () => {
+        const sorted = [...templates].sort((a, b) => b.templateLikes.length - a.templateLikes.length)
+        setTemplates(sorted)
+    }
+
+    const sortByResponses = () => {
+        const sorted = [...templates].sort((a, b) => b.template_responses.length - a.template_responses.length)
+        setTemplates(sorted)
+    }
+
+    useEffect(() => {
+        getData()
+    }, [])
 
     return (
         <div>
-
-            <TemplatesToolBar />
-            <Templates />
-
-
-            {/* {templates.length ? (
-                templates.map((template) => (
-                    <div key={template.id}>
-                        <p>ID: {template.id}</p>
-                        <p>Title: {template.title}</p>
-                        <p>Description: {template.description}</p>
-                        <p>Questions: {template.questions.join(", ")}</p>
-                        <p>Answers: {template.answers.join(", ")}</p>
-                        <p>User: {template.user.first_name} {template.user.last_name}</p>
-                        <p>Created At: {new Date(template.createdAt).toLocaleString()}</p>
-                        <p>Likes Count: {likesCount[template.id] || 0}</p>
-                        <hr />
-                    </div>
-                ))
-            ) : (
-                <p>There is no data</p>
-            )} */}
+            <TemplatesToolBar sortByLikes={sortByLikes} sortByResponses={sortByResponses} />
+            <Templates templates={templates} />
         </div>
     );
 };
