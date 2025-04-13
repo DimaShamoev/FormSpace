@@ -20,7 +20,7 @@ export class TemplateController {
     }
 
     @Get(':id')
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     findOne(@Param('id') id: string) {
         return this.templateService.findOne(+id);
     }

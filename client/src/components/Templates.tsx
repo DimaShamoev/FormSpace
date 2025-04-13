@@ -5,6 +5,9 @@ import { Link } from "react-router-dom"
 import { useAuthor } from "../hooks/useAuthor"
 import { useAuth } from "../hooks/useAuth"
 import { useRole } from "../hooks/useRole"
+import { HiDotsHorizontal } from "react-icons/hi"
+import { FaRegHeart } from "react-icons/fa6"
+import { LuNotebookPen } from "react-icons/lu"
 
 const Templates: React.FunctionComponent = () => {
 
@@ -29,36 +32,50 @@ const Templates: React.FunctionComponent = () => {
                 templates.map(((template) => (
                     <div
                         key={template.id}
-                        className="bg-white"
+                        className="bg-white box-padding flex flex-col gap-3"
                     >
-                        <div className="template-settings">
+                        <div className="template-upper-row flex items-start">
+                            <div className="template-info">
+                                <p className="text-3xl font-medium">
+                                    {template.title}
+                                </p>
+                                <p className="text-xl font-medium">
+                                    {template.description}
+                                </p>
+                            </div>
                             {
-                                isAuth && isAuthor(template.user.id) || isAuth && isAdmin ? 'yeyeye' : 'nono'
+                                isAuth && isAuthor(template.user.id) || isAuth && isAdmin ? (
+                                    <span className="w-full flex justify-end text-xl cursor-pointer">
+                                        <HiDotsHorizontal />
+                                    </span>
+                                ) : ('')
                             }
                         </div>
-                        <div className="id text-xs">
-                            id - {template.id} // user - {template.user.first_name}
+
+                        <div className="template-bottom-row">
+                            <div className="details flex items-center gap-2">
+                                <span className="flex items-center text-sm gap-0.5 cursor-pointer">
+                                    <FaRegHeart className="text-md" /> {template.templateLikes.length}
+                                </span>
+
+                                <span className="flex items-center text-sm gap-0.5">
+                                    <LuNotebookPen className="text-md" /> {template.template_responses.length}
+                                </span>
+                            </div>
+                            
+                            <div className="full text-xs underline text-blue-500">
+                                <Link to={`template/${template.id}`}>
+                                    View Full
+                                </Link>
+                            </div>
+
                         </div>
 
-                        <div className="template-title">
-                            {template.title}
-                        </div>
-
-                        <div className="template-desc">
-                            {template.description}
-                        </div>
-
-                        <div className="likes">
-                            likes - {template.templateLikes.length}
-                        </div>
-
-                        <div className="responses">
-                            responses - {template.template_responses.length}
-                        </div>
-
-                        <div className="full">
-                            <Link to={`template/${template.id}`}>go to</Link>
-                        </div>
+                        {/* <div className="id text-xs">
+                            <span className="text-xs opacity-10">
+                                id - {template.id} // user - {template.user.first_name}
+                            </span>
+                        </div> */}
                     </div>
                 )))
             ) : (
