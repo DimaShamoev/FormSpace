@@ -13,6 +13,7 @@ export class TemplateLike {
     template: Template
 
     @ManyToOne(() => User, user => user.templateLikes)
+    @JoinColumn({ name: 'user_id' })
     user: User
 
 }

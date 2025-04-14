@@ -1,3 +1,4 @@
+import { ILikes } from "../likes/likes.types"
 import { IUserInfo } from "../user/user.types"
 
 export interface ITemplate {
@@ -7,6 +8,6 @@ export interface ITemplate {
     questions: string[]
     answers: string[]
     user: IUserInfo,
-    templateLikes: number[]
+    templateLikes: ILikes[]
     template_responses: number[]
 }

@@ -13,12 +13,14 @@ export class TemplateService {
 
     async allTemplates() {
         return this.templateRepository.find({
-            relations: {
-                user: true,
-                templateLikes: true,
-                tags: true,
-                template_responses: true
-            }
+            relations: [
+                'user',
+                'tags',
+                'template_responses',
+                'templateLikes',
+                'templateLikes.user',
+                'templateLikes.template',
+            ],
         })
     }
 
@@ -30,7 +32,8 @@ export class TemplateService {
             relations: {
                 user: true,
                 tags: true,
-                templateLikes: true
+                templateLikes: true,
+                template_responses: true
             }
         });
     }
@@ -41,7 +44,8 @@ export class TemplateService {
             relations: {
                 user: true,
                 tags: true,
-                templateLikes: true
+                templateLikes: true,
+                template_responses: true
             },
         });
     }
@@ -58,7 +62,8 @@ export class TemplateService {
         const newTemplate = {
             ...createTemplateDto,
             user: { id },
-            tags: [{ id: +createTemplateDto.tags }]
+            tags: [{ id: +createTemplateDto.tags }],
+            likes: [{ id: +createTemplateDto.template_likes }] 
         };
 
         return await this.templateRepository.save(newTemplate);

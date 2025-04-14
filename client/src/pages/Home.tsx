@@ -13,6 +13,8 @@ const Home = () => {
         setTemplates(template.data)
     }
 
+    console.log(templates.map((template) => template.templateLikes.map((like) => like.id)))
+
     const sortByLikes = () => {
         const sorted = [...templates].sort((a, b) => b.templateLikes.length - a.templateLikes.length)
         setTemplates(sorted)
@@ -23,6 +25,21 @@ const Home = () => {
         setTemplates(sorted)
     }
 
+    // const setLike = async (templateId: number) => {
+    //     await request.post<number>(`template-likes/${templateId}`)
+    //     getData()
+    // }
+
+    // const removeLike = async (templateId: number) => {
+    //     await request.delete<number>(`template-likes/${templateId}`)
+    //     getData()
+    // }
+
+    const toggleLikes = async (templateId: number, isLike: boolean) => {
+        isLike ? await request.delete(`template-likes/${templateId}`) : await request.post(`template-likes/${templateId}`)
+        getData()
+    }
+
     useEffect(() => {
         getData()
     }, [])
@@ -30,7 +47,10 @@ const Home = () => {
     return (
         <div>
             <TemplatesToolBar sortByLikes={sortByLikes} sortByResponses={sortByResponses} />
-            <Templates templates={templates} />
+            <Templates
+                templates={templates}
+                toggleLikes={toggleLikes}
+            />
         </div>
     );
 };

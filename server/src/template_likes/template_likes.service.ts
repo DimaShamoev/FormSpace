@@ -28,7 +28,8 @@ export class TemplateLikesService {
                 user: { id }
             },
             relations: {
-                template: true
+                template: true,
+                user: true
             }
         })
     }
