@@ -41,12 +41,14 @@ export class TemplateService {
     async findOne(id: number) {
         return await this.templateRepository.findOne({
             where: { id },
-            relations: {
-                user: true,
-                tags: true,
-                templateLikes: true,
-                template_responses: true
-            },
+            relations: [
+                'user',
+                'tags',
+                'template_responses',
+                'templateLikes',
+                'templateLikes.user',
+                'templateLikes.template',
+            ],
         });
     }
 

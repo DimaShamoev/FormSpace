@@ -4,32 +4,29 @@ import { useAuthor } from "../hooks/useAuthor"
 import { useAuth } from "../hooks/useAuth"
 import { useRole } from "../hooks/useRole"
 import { HiDotsHorizontal } from "react-icons/hi"
-import { FaRegHeart } from "react-icons/fa6"
+import { FaHeart, FaRegHeart } from "react-icons/fa6"
 import { LuNotebookPen } from "react-icons/lu"
-import { request } from "../api/axios.api"
-import { ILikes } from "../Types/likes/likes.types"
-import { useEffect, useState } from "react"
+import { useUser } from "../hooks/useUser"
 
 interface TemplatesProps {
     templates: ITemplate[],
     toggleLikes: (templateId: number, isLike: boolean) => void
+    likeAlert: () => void
 }
 
-const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, toggleLikes }) => {
+const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, toggleLikes, likeAlert }) => {
 
     const isAuth = useAuth()
     const { isAuthor } = useAuthor()
     const { isAdmin } = useRole()
+    const { user } = useUser()
+    
 
     return (
         <div className="templates-container flex flex-col gap-5">
             { templates.length ? (
                 templates.map(((template) => {
-
-                    console.log(template.templateLikes.map((like) => like.user.id))
-                    console.log(template.templateLikes.map((like) => like.template.id))
                     
-
                     return (
                         <div
                             key={template.id}
@@ -53,9 +50,34 @@ const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, toggleL
 
                             <div className="template-bottom-row">
                                 <div className="details flex items-center gap-2">
-                                    <span className="flex items-center text-sm gap-0.5 cursor-pointer">
-                                        <FaRegHeart className="text-md" /> {template.templateLikes.length}
-                                    </span>
+                                    {
+                                        isAuth ? (
+                                            <span
+                                                className="flex items-center text-sm gap-0.5 cursor-pointer"
+                                                onClick={() => toggleLikes(template.id, template.templateLikes.some((like) => like.user.id === user?.id))}
+                                            >
+                                                {template.templateLikes.some((like) => like.user.id === user?.id) ? (
+                                                    <span className="flex items-center gap-1">
+                                                        <FaHeart className="text-md text-red-500" /> {template.templateLikes.length}
+                                                    </span>
+                                                ) : (
+                                                    <span className="flex items-center gap-1">
+                                                        <FaRegHeart className="text-md" /> {template.templateLikes.length}
+                                                    </span>
+                                                )}
+                                            </span>
+                                        ) : (
+
+
+                                            <span
+                                                className="flex items-center text-sm gap-0.5 cursor-pointer"
+                                                onClick={likeAlert}
+                                            >
+                                                <FaRegHeart className="text-md" /> {template.templateLikes.length}
+                                            </span>
+
+                                        )
+                                    }
 
                                     <span className="flex items-center text-sm gap-0.5">
                                         <LuNotebookPen className="text-md" /> {template.template_responses.length}
@@ -67,8 +89,6 @@ const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, toggleL
                                         View Full
                                     </Link>
                                 </div>
-                                <span>{ template.id }</span>
-
                             </div>
                         </div>
                     )

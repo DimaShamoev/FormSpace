@@ -1,19 +1,19 @@
 import TemplatesToolBar from "../components/TemplatesToolBar";
 import Templates from "../components/Templates";
-import { useEffect, useState } from "react";
 import { ITemplate } from "../Types/templates/templates.types";
 import { request } from "../api/axios.api";
+import { toast } from "react-toastify";
+import { useLoaderData } from "react-router-dom";
+import { useState } from "react";
+
+export const templatesLoader =async () => {
+    const { data } = await request.get<ITemplate[]>("templates/all-templates")
+    return data
+}
 
 const Home = () => {
 
-    const [templates, setTemplates] = useState<ITemplate[]>([])
-
-    const getData = async () => {
-        const template = await request.get<ITemplate[]>('templates/all-templates')
-        setTemplates(template.data)
-    }
-
-    console.log(templates.map((template) => template.templateLikes.map((like) => like.id)))
+    const [templates, setTemplates] = useState<ITemplate[]>(useLoaderData() as ITemplate[])
 
     const sortByLikes = () => {
         const sorted = [...templates].sort((a, b) => b.templateLikes.length - a.templateLikes.length)
@@ -25,24 +25,18 @@ const Home = () => {
         setTemplates(sorted)
     }
 
-    // const setLike = async (templateId: number) => {
-    //     await request.post<number>(`template-likes/${templateId}`)
-    //     getData()
-    // }
-
-    // const removeLike = async (templateId: number) => {
-    //     await request.delete<number>(`template-likes/${templateId}`)
-    //     getData()
-    // }
 
     const toggleLikes = async (templateId: number, isLike: boolean) => {
         isLike ? await request.delete(`template-likes/${templateId}`) : await request.post(`template-likes/${templateId}`)
-        getData()
+
+        const { data } = await request.get<ITemplate[]>("templates/all-templates");
+        setTemplates(data);
     }
 
-    useEffect(() => {
-        getData()
-    }, [])
+    const likeAlert = () => {
+        toast.warn("To Like The Template Sing in")
+    }
+    
 
     return (
         <div>
@@ -50,6 +44,7 @@ const Home = () => {
             <Templates
                 templates={templates}
                 toggleLikes={toggleLikes}
+                likeAlert={likeAlert}
             />
         </div>
     );

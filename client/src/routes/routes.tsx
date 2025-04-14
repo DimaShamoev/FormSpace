@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../components/Layout";
 import ErrorPage from "../components/errors/ErrorPage";
-import Home from "../pages/Home";
+import Home, { templatesLoader } from "../pages/Home";
 import Profile from "../pages/Profile";
-import TemplatePage from "../pages/TemplatePage";
+import TemplatePage, { templatePageLoader } from "../pages/TemplatePage";
 import Dashboard from "../admin/Dashboard";
 import SignUp from "../pages/SignUp";
 import SingIn from "../pages/SingIn";
@@ -19,7 +19,8 @@ export const routes = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <Home />
+                element: <Home />,
+                loader: templatesLoader
             },
             {
                 path: 'profile',
@@ -31,7 +32,9 @@ export const routes = createBrowserRouter([
             },
             {
                 path: 'template/:id',
-                element: <ProtectedRoute><TemplatePage /></ProtectedRoute>
+                element: <TemplatePage />,
+                loader: templatePageLoader
+
             },
             {
                 path: "authorization",
