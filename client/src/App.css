@@ -24,8 +24,16 @@ body {
     padding: 10px 25px;
 }
 
+.sm-box-padding {
+    padding: 5px;
+}
+
 .sm-padding_1 {
     padding: 7px;
+}
+
+.sm-margin-bottom_1 {
+    margin-bottom: 30px;
 }
 
 .right-padding_1 {

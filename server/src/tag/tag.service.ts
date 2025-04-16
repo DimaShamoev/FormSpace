@@ -12,6 +12,10 @@ export class TagService {
         @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>
     ) {}
 
+    async allTags() {
+        return await this.tagRepository.find()
+    }
+
     async findAll(id: number) {
         return await this.tagRepository.find({
             where: {

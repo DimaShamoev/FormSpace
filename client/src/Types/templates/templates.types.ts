@@ -1,5 +1,6 @@
 import { ILikes } from "../likes/likes.types"
-import { IUserInfo } from "../user/user.types"
+import { ITags } from "../tags/tags.types"
+import { IUser, IUserInfo } from "../user/user.types"
 
 export interface ITemplate {
     id: number,
@@ -8,6 +9,16 @@ export interface ITemplate {
     questions: string[]
     answers: string[]
     user: IUserInfo,
+    tags: ITags[],
     templateLikes: ILikes[]
-    template_responses: number[]
+    template_responses: ITemplateResponses[]
+    createdAt: Date
+}
+
+export interface ITemplateResponses {
+    id: number,
+    answers: string[],
+    user: IUser,
+    template: ITemplate,
+    createdAt: Date
 }

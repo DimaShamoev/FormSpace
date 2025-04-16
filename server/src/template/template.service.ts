@@ -17,9 +17,14 @@ export class TemplateService {
                 'user',
                 'tags',
                 'template_responses',
+                'template_responses.user',
+                'template_responses.template',
                 'templateLikes',
                 'templateLikes.user',
                 'templateLikes.template',
+                'tags',
+                'tags.user',
+                'tags.template'
             ],
         })
     }
@@ -45,9 +50,14 @@ export class TemplateService {
                 'user',
                 'tags',
                 'template_responses',
+                'template_responses.user',
+                'template_responses.template',
                 'templateLikes',
                 'templateLikes.user',
                 'templateLikes.template',
+                'tags',
+                'tags.user',
+                'tags.template'
             ],
         });
     }

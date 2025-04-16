@@ -17,6 +17,11 @@ export class TagController {
         return this.tagService.create(createTagDto, +req.user.id);
     }
 
+    @Get('all-tags')
+    allTags() {
+        return this.tagService.allTags()
+    }
+
     @Get()
     @UseGuards(JwtAuthGuard)
     findAll(@Req() req) {

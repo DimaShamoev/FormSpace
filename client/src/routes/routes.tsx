@@ -31,6 +31,9 @@ export const routes = createBrowserRouter([
                 element: <ProtectedRoute><CreateTemplate /></ProtectedRoute>
             },
             {
+                path: 'fill-template/:id',
+            },
+            {
                 path: 'template/:id',
                 element: <TemplatePage />,
                 loader: templatePageLoader
