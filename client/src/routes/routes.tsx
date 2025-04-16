@@ -40,6 +40,9 @@ export const routes = createBrowserRouter([
 
             },
             {
+                path: 'edit-template/:id'
+            },
+            {
                 path: "authorization",
                 element: <SingIn />
             },

@@ -20,6 +20,7 @@ export const templatePageLoader = async ({ params }: LoaderFunctionArgs) => {
 const TemplatePage: React.FunctionComponent = () => {
     const [template, setTemplate] = useState(useLoaderData() as ITemplate)
     const [responseOpen, setResponseOpen] = useState<boolean>(false)
+    const [openParams, setOpenParams] = useState<boolean>(false)
     const isAuth = useAuth()
     const { isAuthor } = useAuthor()
     const { isAdmin } = useRole()
@@ -43,6 +44,10 @@ const TemplatePage: React.FunctionComponent = () => {
         setResponseOpen(prev => !prev)
     }
 
+    const toggleParamsBtn = () => {
+        setOpenParams(prev => !prev)
+    }
+
     return (
         <div className="flex flex-col gap-4">
             <div className="bg-white box-padding template-main-info flex flex-col gap-3">
@@ -61,9 +66,17 @@ const TemplatePage: React.FunctionComponent = () => {
                         </p>
                     </div>
                     {(isAuth && isAuthor(template?.user?.id) || isAuth && isAdmin) && (
-                        <span className="w-full flex justify-end text-xl cursor-pointer">
-                            <HiDotsHorizontal />
-                        </span>
+                        <div className="params-btn w-full flex justify-end text-xl cursor-pointer relative">
+                            <HiDotsHorizontal onClick={toggleParamsBtn} />
+                            <ul className={`absolute text-sm top-[15px] w-[100px] bg-slate-500 text-white sm-padding_1 transition-all ${openParams ? 'flex flex-col top-[20px]' : 'hidden'}`}>
+                                <li className="sm-padding-box hover:bg-slate-300 hover:text-gray-600 sm-padding_1">
+                                    <Link to={`edit-template/${template.id}`}>Delete</Link>
+                                </li>
+                                <li className="sm-padding-box hover:bg-slate-300 hover:text-gray-600 sm-padding_1">
+                                    <Link to={`/edit-template/${template.id}`}>Edit</Link>
+                                </li>
+                            </ul>
+                        </div>
                     )}
                 </div>
 
