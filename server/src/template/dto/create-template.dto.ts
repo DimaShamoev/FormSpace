@@ -20,6 +20,9 @@ export class CreateTemplateDto {
     @IsString({ each: true })
     answers: string[]
 
+    @IsString()
+    status: string
+
     @IsOptional()
     user: User
 

@@ -1,42 +1,60 @@
 import { useEffect, useState } from "react"
 import { request } from "../api/axios.api"
-import { useRole } from "../hooks/useRole"
+import { ITemplate } from "../Types/templates/templates.types"
+import { IDataUser } from "../Types/user/user.types"
+import { useLoaderData } from "react-router-dom"
+import { ILikes } from "../Types/likes/likes.types"
+import { useUser } from "../hooks/useUser"
 
-interface IUser {
-    id: number,
-    email: string,
-    role: string
-} 
+export const userLoader = async () => {
+    const { data } = await request.get<IDataUser>(`auth/profile`)
+    return data
+}
 
 const Profile = () => {
 
-    const [user, setUser] = useState<IUser | null>(null)
-    const { role } = useRole()
+    const userData = useLoaderData() as IDataUser
+    const [templates, setTemplates] = useState<ITemplate[]>([])
+    const [likes, setLikes] = useState<ILikes[]>([])
+    const { user } = useUser()
 
-    const getData = async (): Promise<void> => {
-        const response = await request.get("auth/profile");
-        setUser(response.data);  
-    };
+    const getTemplates = async () => {
+        const response = await request.get('templates/all-templates')
+        setTemplates(response.data)
+    }
 
     useEffect(() => {
-        getData()
+        getTemplates()
     }, [])
 
-
     return (
-        <div>
-            {user ? (
-                <pre>
-                    <span>
-                        <p>{user.id}</p>
-                        <p>{user.email}</p>
-                        <p>{user.role}</p>
-                    </span>
-                    {role}
-                </pre>
-            ) : (
-                <p>not found</p>
-            )}
+        <div className="flex flex-col gap-4">
+            <div className="profile flex items-center gap-4 bg-white box-padding">
+                <div className="avatar"></div>
+                <div className="profile-info flex flex-col gap-2">
+                    <p><b>Email: </b>{userData.email}</p>
+                    <p><b>First Name: </b>{userData.first_name}</p>
+                    <p><b>Last Name: </b>{userData.last_name}</p>
+                </div>
+            </div>
+            <div className="templates box-padding bg-white">
+                templates
+                <ul className="template-list">
+                    {templates.length ?
+                        templates
+                        .filter((template) => template.user.id === user?.id)
+                        .map((template) => (
+                            <li key={template.id}>
+                                {template.title}
+                            </li>
+                        )) :
+                        "No Templates"
+                    }
+                </ul>
+            </div>
+            <div className="likes box-padding bg-white">
+                likes
+            </div>
         </div>
     )
 }

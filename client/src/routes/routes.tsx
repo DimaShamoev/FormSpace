@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "../components/Layout";
 import ErrorPage from "../components/errors/ErrorPage";
 import Home, { templatesLoader } from "../pages/Home";
-import Profile from "../pages/Profile";
+import Profile, { userLoader } from "../pages/Profile";
 import TemplatePage, { templatePageLoader } from "../pages/TemplatePage";
 import Dashboard from "../admin/Dashboard";
 import SignUp from "../pages/SignUp";
@@ -24,7 +24,8 @@ export const routes = createBrowserRouter([
             },
             {
                 path: 'profile',
-                element: <ProtectedRoute><Profile /></ProtectedRoute>
+                element: <ProtectedRoute><Profile /></ProtectedRoute>,
+                loader: userLoader
             },
             {
                 path: 'create-template',

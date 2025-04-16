@@ -27,6 +27,9 @@ const SingIn = () => {
                 setToken('token', response.token)
                 dispatch(login(response))
                 navigate('/')
+                setTimeout(() => {
+                    window.location.reload()
+                }, 100);    
             }
         } catch (err: any) {
             const error = 'Email Or Password Are Wrong'

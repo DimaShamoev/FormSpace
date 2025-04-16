@@ -12,7 +12,6 @@ export const templatesLoader =async () => {
 }
 
 const Home = () => {
-
     const [templates, setTemplates] = useState<ITemplate[]>(useLoaderData() as ITemplate[])
 
     const sortByLikes = () => {

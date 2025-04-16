@@ -12,7 +12,6 @@ export class TagController {
     @Post()
     @UsePipes(new ValidationPipe())
     @UseGuards(JwtAuthGuard)
-    // Create Tag issue add -> { title: string; user: { id: number; }; template: { id: number; }; } <- if need 
     create(@Body() createTagDto: CreateTagDto, @Req() req): Promise<Tag> {
         return this.tagService.create(createTagDto, +req.user.id);
     }

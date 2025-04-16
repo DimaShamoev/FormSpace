@@ -10,6 +10,16 @@ export interface IUser {
     token: string
 }
 
+export interface IDataUser {
+    id: number
+    first_name: string
+    last_name: string
+    email: string
+    password: string
+    role: Role
+    createdAt: Date
+}
+
 export interface IUserData {
     email: string,
     password: string

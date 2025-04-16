@@ -23,15 +23,19 @@ export class AuthService {
     }
     
     async login(user: IUser) {
-        const { id, email, role } = user
+        const { id, email, role, first_name, last_name } = user
 
         return {
             id,
             email,
             role,
+            first_name,
+            last_name,
             token: this.jwtService.sign({
                 id: user.id,
                 email: user.email,
+                first_name: user.first_name,
+                last_name: user.last_name,
                 role: user.role
             })
         }

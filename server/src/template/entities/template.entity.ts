@@ -21,6 +21,9 @@ export class Template {
     @Column('text', { array: true })
     answers: string[]
 
+    @Column()
+    status: string
+
     @ManyToOne(() => User, user => user.templates)
     @JoinColumn({ name: "user_id" })
     user: User

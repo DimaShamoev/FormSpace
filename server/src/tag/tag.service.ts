@@ -3,7 +3,7 @@ import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Tag } from './entities/tag.entity';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 
 @Injectable()
 export class TagService {
@@ -38,23 +38,27 @@ export class TagService {
         });
     }
 
-    async create(createTagDto: CreateTagDto, userId: number) {
+    async create(createTagDto: CreateTagDto, userId: number): Promise<Tag> {
         const tagExist = await this.tagRepository.find({
             where: {
                 user: { id: userId },
-                title: createTagDto.title
-            }
+                title: createTagDto.title,
+            },
         });
     
-        if (tagExist.length) throw new BadRequestException("This Tag Already Exist");
+        if (tagExist.length) {
+            throw new BadRequestException("This Tag Already Exist");
+        }
     
         const template = await this.tagRepository.findOne({
             where: { id: createTagDto.templateId },
         });
     
-        if (!template) throw new BadRequestException("Template not found");
+        if (!template) {
+            throw new BadRequestException("Template not found");
+        }
     
-        const newTag = {
+        const newTag: DeepPartial<Tag> = {
             title: createTagDto.title,
             user: { id: userId },
             template: { id: createTagDto.templateId },

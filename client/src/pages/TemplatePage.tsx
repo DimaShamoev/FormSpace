@@ -115,7 +115,7 @@ const TemplatePage: React.FunctionComponent = () => {
                         </span>
                     </div>
                 </div>
-                    {isAuth && !isAuthor(template?.id) ? (
+                    {isAuth && !isAuthor(template?.user.id) ? (
                         <div className="fill-btn bg-blue-500 w-max sm-box-padding rounded-md text-white">
                             <Link to={`/fill-template/${template?.id}`}>Fill The Form</Link>
                         </div>

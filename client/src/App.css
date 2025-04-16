@@ -196,6 +196,39 @@ body {
     margin: 20px 0 0 0;
 }
 
+/* avatar */
+.avatar {
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+    background-color: rgba(223, 222, 222, .5);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        height: 40px;
+        width: 100px;
+        bottom: 0;
+        border-radius: 50%;
+        background-color: black;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -80%);
+        background-color: black;
+    }
+}
+
+
 
 /* Media Queries */
 @media screen and (max-width: 600px) {
