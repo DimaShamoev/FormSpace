@@ -8,7 +8,7 @@ export class TemplateLike {
     @PrimaryGeneratedColumn({ name: 'like_id' })
     id: number
 
-    @ManyToOne(() => Template, template => template.templateLikes)
+    @ManyToOne(() => Template, template => template.templateLikes, {onDelete: 'CASCADE'})
     @JoinColumn({ name: 'template_id' })
     template: Template
 

@@ -232,7 +232,30 @@ body {
     }
 }
 
+/* Table */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
 
+thead tr:nth-child(odd),
+tbody tr:nth-child(even) {
+    background-color: rgba(234, 234, 234, 0.3);
+}
+
+th, td  {
+    border-top: 2px solid rgba(145, 145, 145, 0.3);
+    padding: 2px;
+}
+
+tbody tr td:first-child {
+    text-align: center;
+}
+
+th:not(th:last-child), 
+td:not(td:last-child) {
+    border-right: 2px solid rgba(145, 145, 145, 0.5);
+}
 
 /* Media Queries */
 @media screen and (max-width: 600px) {

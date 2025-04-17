@@ -1,4 +1,4 @@
-import { Link, LoaderFunctionArgs, useLoaderData, useParams } from "react-router-dom"
+import { Link, LoaderFunctionArgs, useLoaderData, useNavigate, useParams } from "react-router-dom"
 import { ITemplate } from "../Types/templates/templates.types"
 import { request } from "../api/axios.api"
 import { useAuth } from "../hooks/useAuth"
@@ -17,7 +17,7 @@ export const templatePageLoader = async ({ params }: LoaderFunctionArgs) => {
     return data
 }
 
-const TemplatePage: React.FunctionComponent = () => {
+export const TemplatePage: React.FunctionComponent = () => {
     const [template, setTemplate] = useState(useLoaderData() as ITemplate)
     const [responseOpen, setResponseOpen] = useState<boolean>(false)
     const [openParams, setOpenParams] = useState<boolean>(false)
@@ -26,6 +26,7 @@ const TemplatePage: React.FunctionComponent = () => {
     const { isAdmin } = useRole()
     const { user } = useUser()
     const { id } = useParams()
+    const navigate = useNavigate()
 
     const toggleLikes = async (isLike: boolean) => {
         if (!id) return
@@ -48,9 +49,16 @@ const TemplatePage: React.FunctionComponent = () => {
         setOpenParams(prev => !prev)
     }
 
+    const handleRemove = async () => {
+        await request.delete(`templates/${id}`)
+        navigate('/')
+    }
+
     return (
         <>
-            {(isAuth && isAuthor(template.user.id)) || (isAuth && isAdmin) ? (
+            {template.status === 'private' && !isAuthor(template.user.id) && !isAdmin ? (
+                "This Form Is Private"
+            ) : (
                 <div className="flex flex-col gap-4">
                     <div className="bg-white box-padding template-main-info flex flex-col gap-3">
                         <div className="template-upper-row flex items-start">
@@ -63,15 +71,15 @@ const TemplatePage: React.FunctionComponent = () => {
                                     ))}
                                 </p>
                             </div>
-                            {(isAuth && isAuthor(template?.user?.id)) || isAuth && isAdmin ? (
+                            {(isAuth && isAuthor(template?.user?.id)) || (isAuth && isAdmin) ? (
                                 <div className="params-btn w-full flex justify-end text-xl cursor-pointer relative">
                                     <HiDotsHorizontal onClick={toggleParamsBtn} />
                                     <ul className={`absolute text-sm top-[15px] w-[100px] bg-slate-500 text-white sm-padding_1 transition-all ${openParams ? 'flex flex-col top-[20px]' : 'hidden'}`}>
                                         <li className="sm-padding-box hover:bg-slate-300 hover:text-gray-600 sm-padding_1">
-                                            <Link to={`edit-template/${template.id}`}>Delete</Link>
+                                            <button onClick={handleRemove}>Delete</button>
                                         </li>
                                         <li className="sm-padding-box hover:bg-slate-300 hover:text-gray-600 sm-padding_1">
-                                            <Link to={`/edit-template/${template.id}`}>Edit</Link>
+                                            <Link to={`../edit-template/${template.id}`}>Edit</Link>
                                         </li>
                                     </ul>
                                 </div>
@@ -121,7 +129,7 @@ const TemplatePage: React.FunctionComponent = () => {
                         ) : null}
                     </div>
 
-                    {isAuth && isAuthor(template.user.id) ? (
+                    {isAuth && isAuthor(template.user.id) || isAuth && isAdmin ? (
                         <div className={`flex flex-col gap-4 bg-white box-padding h-[48px] overflow-hidden transition-all ${responseOpen ? 'h-full' : ''}`}>
                             <p className="flex items-center justify-between">
                                 <span className="responses-title text-xl">Responses On Your Form</span>
@@ -152,7 +160,7 @@ const TemplatePage: React.FunctionComponent = () => {
                         </div>
                     ) : null}
                 </div>
-            ) : "This Form Is Private"}
+            )}
         </>
     )
 }

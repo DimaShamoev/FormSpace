@@ -14,7 +14,7 @@ export class Tag {
     @JoinColumn({name: 'user_id'})
     user: User
 
-    @ManyToOne(() => Template, template => template.tags)
+    @ManyToOne(() => Template, template => template.tags, {onDelete: 'CASCADE'})
     @JoinColumn({ name: 'template_id' })
     template: Template;
 }

@@ -10,6 +10,8 @@ import SingIn from "../pages/SingIn";
 import ProtectedRoute from "../components/pageProtectors/ProtectedRoute";
 import ProtectedRouteAdmin from "../components/pageProtectors/ProtectedRouteAdmin";
 import CreateTemplate from "../pages/CreateTemplate";
+import EditTemplate from "../pages/EditTemplate";
+import FillTemplate, { fillTemplateLoader } from "../pages/FillTemplate";
 
 export const routes = createBrowserRouter([
     {
@@ -33,6 +35,8 @@ export const routes = createBrowserRouter([
             },
             {
                 path: 'fill-template/:id',
+                element: <ProtectedRoute><FillTemplate /></ProtectedRoute>,
+                loader: fillTemplateLoader
             },
             {
                 path: 'template/:id',
@@ -41,7 +45,8 @@ export const routes = createBrowserRouter([
 
             },
             {
-                path: 'edit-template/:id'
+                path: 'edit-template/:templateId',
+                element: <ProtectedRoute><EditTemplate /></ProtectedRoute>,
             },
             {
                 path: "authorization",

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import { request } from "../api/axios.api"
-import { ITemplate } from "../Types/templates/templates.types"
+import { ITemplate, ITemplateResponses } from "../Types/templates/templates.types"
 import { IDataUser } from "../Types/user/user.types"
 import { useLoaderData } from "react-router-dom"
 import { ILikes } from "../Types/likes/likes.types"
-import { useUser } from "../hooks/useUser"
+import UserTemplatesTable from "../components/UserTemplatesTable"
+import UserLikesTable from "../components/UseLikesTable"
+import UserResponsesTable from "../components/UserResponsesTable"
 
 export const userLoader = async () => {
     const { data } = await request.get<IDataUser>(`auth/profile`)
@@ -15,12 +17,16 @@ const Profile = () => {
 
     const userData = useLoaderData() as IDataUser
     const [templates, setTemplates] = useState<ITemplate[]>([])
+    const [responses, setResponses] = useState<ITemplateResponses[]>([])
     const [likes, setLikes] = useState<ILikes[]>([])
-    const { user } = useUser()
 
     const getTemplates = async () => {
-        const response = await request.get('templates/all-templates')
-        setTemplates(response.data)
+        const templates = await request.get('templates')
+        const responses = await request.get('template-responses')
+        const likes = await request.get('template-likes')
+        setTemplates(templates.data)
+        setResponses(responses.data)
+        setLikes(likes.data)
     }
 
     useEffect(() => {
@@ -37,24 +43,17 @@ const Profile = () => {
                     <p><b>Last Name: </b>{userData.last_name}</p>
                 </div>
             </div>
+            
             <div className="templates box-padding bg-white">
-                templates
-                <ul className="template-list">
-                    {templates.length ?
-                        templates
-                        .filter((template) => template.user.id === user?.id)
-                        .map((template) => (
-                            <li key={template.id}>
-                                {template.title}
-                            </li>
-                        )) :
-                        "No Templates"
-                    }
-                </ul>
+                <UserTemplatesTable templates={templates} />
             </div>
             <div className="likes box-padding bg-white">
-                likes
+                <UserLikesTable likes={likes} />
             </div>
+            <div className="responses box-padding bg-white">
+                <UserResponsesTable responses={responses} />
+            </div>
+
         </div>
     )
 }
