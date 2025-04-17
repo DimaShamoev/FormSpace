@@ -47,9 +47,9 @@ const CreateTemplate: React.FC = () => {
         try {
             const response = await request.post("/templates", requestData);
             console.log("Response:", response.data);
-        } catch (error: any) {
-            // console.error("Error:", error.response?.data || error.message);
-            toast.error(String(error.response?.data))
+        } catch (err: any) {
+            const error = err.response?.data.message
+            toast.error(error.toString())
         }
     
         console.log("Request Data:", JSON.stringify(requestData, null, 2));

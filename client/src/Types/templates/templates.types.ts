@@ -8,6 +8,7 @@ export interface ITemplate {
     description: string;
     questions: string[];
     answers: string[];
+    status: string
     user: IUserInfo;
     tags: ITags[];
     templateLikes: ILikes[];

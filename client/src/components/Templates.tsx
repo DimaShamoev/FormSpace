@@ -15,19 +15,16 @@ interface TemplatesProps {
 }
 
 const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, toggleLikes, likeAlert }) => {
-
     const isAuth = useAuth()
     const { isAuthor } = useAuthor()
     const { isAdmin } = useRole()
     const { user } = useUser()
-    
 
     return (
         <div className="templates-container flex flex-col gap-5">
-            { templates.length ? (
-                templates.map(((template) => {
-                    
-                    return (
+            {templates.length > 0 ? (
+                templates.map((template) => (
+                    template.status !== 'private' && (
                         <div
                             key={template.id}
                             className="bg-white box-padding flex flex-col gap-3"
@@ -40,7 +37,11 @@ const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, toggleL
                                     <p className="text-xl font-medium">
                                         {template.description}
                                     </p>
-                                    <p className="flex gap-0.5 text-xs text-gray-400">{template.tags.map((tag) => (<span key={tag.id}>{tag.title}</span>))}</p>
+                                    <p className="flex gap-0.5 text-xs text-gray-400">
+                                        {template.tags.map((tag) => (
+                                            <span key={tag.id}>{tag.title}</span>
+                                        ))}
+                                    </p>
                                 </div>
                                 {(isAuth && isAuthor(template.user.id) || isAuth && isAdmin) && (
                                     <span className="w-full flex justify-end text-xl cursor-pointer">
@@ -51,40 +52,40 @@ const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, toggleL
 
                             <div className="template-bottom-row">
                                 <div className="details flex items-center gap-2">
-                                    {
-                                        isAuth ? (
-                                            <span
-                                                className="flex items-center text-sm gap-0.5 cursor-pointer"
-                                                onClick={() => toggleLikes(template.id, template.templateLikes.some((like) => like.user.id === user?.id))}
-                                            >
-                                                {template.templateLikes.some((like) => like.user.id === user?.id) ? (
-                                                    <span className="flex items-center gap-1">
-                                                        <FaHeart className="text-md text-red-500" /> {template.templateLikes.length}
-                                                    </span>
-                                                ) : (
-                                                    <span className="flex items-center gap-1">
-                                                        <FaRegHeart className="text-md" /> {template.templateLikes.length}
-                                                    </span>
-                                                )}
-                                            </span>
-                                        ) : (
-
-
-                                            <span
-                                                className="flex items-center text-sm gap-0.5 cursor-pointer"
-                                                onClick={likeAlert}
-                                            >
-                                                <FaRegHeart className="text-md" /> {template.templateLikes.length}
-                                            </span>
-
-                                        )
-                                    }
+                                    {isAuth ? (
+                                        <span
+                                            className="flex items-center text-sm gap-0.5 cursor-pointer"
+                                            onClick={() =>
+                                                toggleLikes(
+                                                    template.id,
+                                                    template.templateLikes.some((like) => like.user.id === user?.id)
+                                                )
+                                            }
+                                        >
+                                            {template.templateLikes.some((like) => like.user.id === user?.id) ? (
+                                                <span className="flex items-center gap-1">
+                                                    <FaHeart className="text-md text-red-500" /> {template.templateLikes.length}
+                                                </span>
+                                            ) : (
+                                                <span className="flex items-center gap-1">
+                                                    <FaRegHeart className="text-md" /> {template.templateLikes.length}
+                                                </span>
+                                            )}
+                                        </span>
+                                    ) : (
+                                        <span
+                                            className="flex items-center text-sm gap-0.5 cursor-pointer"
+                                            onClick={likeAlert}
+                                        >
+                                            <FaRegHeart className="text-md" /> {template.templateLikes.length}
+                                        </span>
+                                    )}
 
                                     <span className="flex items-center text-sm gap-0.5">
                                         <LuNotebookPen className="text-md" /> {template.template_responses.length}
                                     </span>
                                 </div>
-                                
+
                                 <div className="full text-xs underline text-blue-500">
                                     <Link to={`template/${template.id}`}>
                                         View Full
@@ -93,10 +94,10 @@ const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, toggleL
                             </div>
                         </div>
                     )
-                }))
+                ))
             ) : (
                 <p className="text-lg text-red-500">Something Went Wrong ☹️😥</p>
-            ) }
+            )}
         </div>
     )
 }

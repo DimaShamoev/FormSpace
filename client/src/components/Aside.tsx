@@ -43,6 +43,7 @@ const Aside: React.FunctionComponent = () => {
                             <NavLink
                                 to='/'
                                 className={({isActive}) => `aside-link ${isActive ? 'active' : ''}`}
+                                onClick={setAside}
                             >
                                 <AiFillHome /> home
                             </NavLink>
@@ -52,6 +53,7 @@ const Aside: React.FunctionComponent = () => {
                                 <NavLink
                                     to='/profile'
                                     className={({isActive}) => `aside-link ${isActive ? 'active' : ''}`}
+                                    onClick={setAside}
                                 >
                                     <FaUserLarge /> Profile
                                 </NavLink>
@@ -61,6 +63,7 @@ const Aside: React.FunctionComponent = () => {
                                 <NavLink
                                     to='/authorization'
                                     className={({isActive}) => `aside-link ${isActive ? 'active' : ''}`}
+                                    onClick={setAside}
                                 >
                                     <FaRunning /> Get Started
                                 </NavLink>
@@ -71,6 +74,7 @@ const Aside: React.FunctionComponent = () => {
                                 <NavLink
                                     to='/admin'
                                     className={({isActive}) => `aside-link ${isActive ? 'active' : ''}`}
+                                    onClick={setAside}
                                 >
                                     <RiAdminFill /> Admin
                                 </NavLink>
@@ -82,7 +86,8 @@ const Aside: React.FunctionComponent = () => {
                             <li>
                                 <button
                                     className='aside-link cursor-pointer'
-                                    onClick={logoutHandler}
+                                    onClick={() => (logoutHandler)}
+                                    
                                 >
                                     <ImExit /> Log Out
                                 </button>
