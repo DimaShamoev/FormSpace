@@ -52,14 +52,14 @@ const TemplatePage: React.FunctionComponent = () => {
         <div className="flex flex-col gap-4">
             <div className="bg-white box-padding template-main-info flex flex-col gap-3">
                 <div className="template-upper-row flex items-start">
-                    <div className="template-info">
+                    <div className="template-info w-full">
                         <p className="text-3xl font-medium">
                             {template?.title}
                         </p>
                         <p className="text-xl font-medium">
                             {template?.description}
                         </p>
-                        <p className="tags">
+                        <p className="tags flex gap-1">
                             {template.tags.map((tag) => (
                                 <span className="text-[12px] text-gray-500">#{tag.title}</span>
                             ))}
@@ -122,8 +122,8 @@ const TemplatePage: React.FunctionComponent = () => {
                     ) : null}
             </div>
 
-            {isAuth && isAuthor(template.id) ? (
-                <div className={`flex flex-col gap-4 bg-white box-padding h-[50px] overflow-hidden transition-all ${responseOpen ? 'h-full' : ''}`}>
+            {isAuth && isAuthor(template.user.id) ? (
+                <div className={`flex flex-col gap-4 bg-white box-padding h-[48px] overflow-hidden transition-all ${responseOpen ? 'h-full' : ''}`}>
                     <p className="flex items-center justify-between">
                         <span className="responses-title text-xl">
                             Responses On Your Form
@@ -132,24 +132,28 @@ const TemplatePage: React.FunctionComponent = () => {
                             <IoIosArrowUp className={`rotate-0 transition-all ${responseOpen ? 'rotate-180' : ''}`} />
                         </span>
                     </p>
-                    {template.template_responses.map((response) => (
-                        <div className="response flex flex-col gap-[10px] sm-margin-bottom_1">                            
-                            <div className="submitted-info text-xs">
-                                <p>Filled By: {response.user.email}</p>
-                                <p>Submitted: {new Date(response.createdAt).toLocaleString('en-GB')}</p>
-                            </div>
-                            {template.questions.map((question, index) => (
-                                <div key={index}>
-                                    <p className="bg-slate-400/60 sm-padding_1">{question}</p>
-                                    <p className="bg-slate-200/50 sm-padding_1">{response.answers[index]}</p>
+                    {template.template_responses && template.template_responses.length > 0 ? (
+                        <div>
+                            {template.template_responses.map((response, responseIndex) => (
+                                <div key={responseIndex} className="response flex flex-col gap-[10px] sm-margin-bottom_1">                            
+                                    <div className="submitted-info text-xs">
+                                        <p>Filled By: {response.user.email}</p>
+                                        <p>Submitted: {new Date(response.createdAt).toLocaleString('en-GB')}</p>
+                                    </div>
+                                    {template.questions.map((question, index) => (
+                                        <div key={index}>
+                                            <p className="bg-slate-400/60 sm-padding_1">{question}</p>
+                                            <p className="bg-slate-200/50 sm-padding_1">{response.answers[index]}</p>
+                                        </div>
+                                    ))}
                                 </div>
                             ))}
-                            
                         </div>
-                    ))}
+                    ) : (
+                        <p className="text-gray-500">There No Responses On Your Form</p>
+                    )}
                 </div>
-            ) : null
-            }
+            ) : null}
             
         </div>
     )

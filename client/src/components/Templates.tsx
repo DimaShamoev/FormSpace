@@ -33,13 +33,14 @@ const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, toggleL
                             className="bg-white box-padding flex flex-col gap-3"
                         >
                             <div className="template-upper-row flex items-start">
-                                <div className="template-info">
+                                <div className="template-info w-full">
                                     <p className="text-3xl font-medium">
                                         {template.title}
                                     </p>
                                     <p className="text-xl font-medium">
                                         {template.description}
                                     </p>
+                                    <p className="flex gap-0.5 text-xs text-gray-400">{template.tags.map((tag) => (<span key={tag.id}>{tag.title}</span>))}</p>
                                 </div>
                                 {(isAuth && isAuthor(template.user.id) || isAuth && isAdmin) && (
                                     <span className="w-full flex justify-end text-xl cursor-pointer">
