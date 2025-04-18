@@ -14,6 +14,10 @@ export class UserService {
         private readonly jwtService: JwtService
     ) {}
 
+    async allUsers(): Promise<User[]> {
+        return await this.userRepository.find()
+    }
+
     async create(createUserDto: CreateUserDto): Promise<{ newUser: User, token: string }> {
 
         const userEmailExist = await this.userRepository.findOne({

@@ -110,7 +110,7 @@ const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, clicked
                     )
                 ))
             ) : (
-                <p className="text-lg text-red-500">Something Went Wrong ☹️😥</p>
+                <p className="text-lg text-blue-500">There No Form, Be The First 😀👨🏻‍💻</p>
             )}
         </div>
     )

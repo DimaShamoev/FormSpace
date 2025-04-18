@@ -1,6 +1,8 @@
 const Dashboard = () => {
     return (
-        <div>Dashboard</div>
+        <div className="bg-white box-padding">
+            Welcome Back Admin, Let's Start Work 🙂
+        </div>
     )
 }
 

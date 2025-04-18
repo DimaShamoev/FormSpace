@@ -257,6 +257,12 @@ td:not(td:last-child) {
     border-right: 2px solid rgba(145, 145, 145, 0.5);
 }
 
+/* Admin */
+.admin-nav ul {
+    display: flex;
+    gap: 20px;
+}
+
 /* Media Queries */
 @media screen and (max-width: 600px) {
 
@@ -270,5 +276,11 @@ td:not(td:last-child) {
 
     .box-padding {
         padding: 10px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .admin-nav ul {
+        justify-content: space-between;
     }
 }

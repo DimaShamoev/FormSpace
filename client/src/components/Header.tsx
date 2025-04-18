@@ -26,7 +26,7 @@ const Header = () => {
         <header className="flex justify-between items-center box-padding">
 
             <div className="logo text-2xl">
-                <NavLink to='/'>ChangeName</NavLink>
+                <NavLink to='/'>FormSpace</NavLink>
             </div>
             <nav className="nav-links">
                 <ul className="flex gap-10 text-lg">

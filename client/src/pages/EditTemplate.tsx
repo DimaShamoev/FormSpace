@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
-import { ICreateTemplate, ITemplateFormData } from "../Types/templates/templates.types";
+import { ICreateTemplate, ITemplateFormData, ITemplateResponses } from "../Types/templates/templates.types";
 import { request } from "../api/axios.api";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,10 +12,11 @@ const EditTemplate: React.FC = () => {
         name: "questions",
     });
 
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [tags, setTags] = useState("");
-    const [status, setStatus] = useState("");
+    const [title, setTitle] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
+    const [tags, setTags] = useState<string>("");
+    const [status, setStatus] = useState<string>("");
+    const [answers, setAnswers] = useState<ITemplateResponses[]>([])
 
     const navigate = useNavigate();
     const { templateId } = useParams();
@@ -30,6 +31,7 @@ const EditTemplate: React.FC = () => {
                 setDescription(template.description);
                 setTags(template.tags.join(", "));
                 setStatus(template.status);
+                setAnswers(template.answers)
 
                 setValue("title", template.title);
                 setValue("description", template.description);
@@ -155,8 +157,7 @@ const EditTemplate: React.FC = () => {
                                 type="text"
                                 placeholder="Enter your question"
                                 className="border-2 w-full rounded xs-box-padding text-sm"
-                                {...register(`questions.${index}.question`)}
-                                
+                                {...register(`questions.${index}.question`)}                                
                             />
 
                             {field.type === "checkbox" && field.answers ? (

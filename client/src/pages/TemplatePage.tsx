@@ -142,7 +142,7 @@ export const TemplatePage: React.FunctionComponent = () => {
                     {isAuth && isAuthor(template.user.id) || isAuth && isAdmin ? (
                         <div className={`flex flex-col gap-4 bg-white box-padding h-[48px] overflow-hidden transition-all ${responseOpen ? 'h-full' : ''}`}>
                             <p className="flex items-center justify-between">
-                                <span className="responses-title text-xl">Responses On Your Form</span>
+                                <span className="responses-title text-xl">Responses On Form</span>
                                 <span className="cursor-pointer" onClick={toggleResponseBtn}>
                                     <IoIosArrowUp className={`rotate-0 transition-all ${responseOpen ? 'rotate-180' : ''}`} />
                                 </span>
@@ -165,7 +165,7 @@ export const TemplatePage: React.FunctionComponent = () => {
                                     ))}
                                 </div>
                             ) : (
-                                <p className="text-gray-500">There No Responses On Your Form</p>
+                                <p className="text-gray-500">There No Responses On Form</p>
                             )}
                         </div>
                     ) : null}
