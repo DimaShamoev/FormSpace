@@ -40,14 +40,14 @@ const AdminsTable: React.FunctionComponent = () => {
                     </thead>
                     <tbody>
                         {admins.map((admin) => admin.role === 'admin' ? (
-                            <tr>
+                            <tr key={admin.id}>
                                 <td>
                                     <input type="checkbox" />
                                 </td>
-                                <td>
+                                <td className="text-center">
                                     {admin.first_name}
                                 </td>
-                                <td>
+                                <td className="text-center">
                                     {admin.last_name}
                                 </td>
                                 <td>

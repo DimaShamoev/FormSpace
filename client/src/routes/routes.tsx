@@ -14,8 +14,8 @@ import SignUp from "../pages/SignUp";
 import SingIn from "../pages/SingIn";
 import TemplatePage, { templatePageLoader } from "../pages/TemplatePage";
 import AdminLayout from "../admin/components/AdminLayout";
-import TemplatesTable from "../admin/pages/TemplatesTable";
-import UsersTable from "../admin/pages/UsersTable";
+import TemplatesTable, { templatesLoaderAdmin } from "../admin/pages/TemplatesTable";
+import UsersTable, { usersLoaderAdmin } from "../admin/pages/UsersTable";
 
 export const routes = createBrowserRouter([
     {
@@ -74,11 +74,13 @@ export const routes = createBrowserRouter([
                     },
                     { 
                         path: "users-list",
-                        element: <UsersTable />
+                        element: <UsersTable />,
+                        loader: usersLoaderAdmin
                     },
                     { 
                         path: "templates-list",
-                        element: <TemplatesTable />
+                        element: <TemplatesTable />,
+                        loader: templatesLoaderAdmin
                     },
                 ],
             },

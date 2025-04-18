@@ -24,7 +24,7 @@ export const TemplatePage: React.FunctionComponent = () => {
     const [openParams, setOpenParams] = useState<boolean>(false)
     const isAuth = useAuth()
     const { isAuthor } = useAuthor()
-    const { isAdmin } = useRole()
+    const { isAdmin, isUser } = useRole()
     const { user } = useUser()
     const { id } = useParams()
     const navigate = useNavigate()
@@ -129,7 +129,7 @@ export const TemplatePage: React.FunctionComponent = () => {
                             </div>
                         </div>
 
-                        {isAuth && !isAuthor(template?.user.id) ? (
+                        {isAuth && !isAuthor(template?.user.id) && !isAdmin ? (
                             <div className="fill-btn bg-blue-500 w-max sm-box-padding rounded-md text-white">
                                 <Link to={`/fill-template/${template?.id}`}>Fill The Form</Link>
                             </div>
