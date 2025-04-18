@@ -18,11 +18,8 @@ const UserLikesTable: React.FunctionComponent<IUserLikesTable> = ({ likes }) => 
     }
 
     const handleCheckboxChange = (templateId: number) => {
-        setSelectedTemplateIds((prevSelected) =>
-            prevSelected.includes(templateId)
-                ? prevSelected.filter((id) => id !== templateId)
-                : [...prevSelected, templateId]
-        )
+        setSelectedTemplateIds((prevSelected) => prevSelected.includes(templateId) ? prevSelected.filter((id) => id !== templateId) : [...prevSelected, templateId]
+)
     }
 
     const areAllSelected = selectedTemplateIds.length === likes.length

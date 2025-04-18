@@ -5,6 +5,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import * as argon2 from 'argon2'
 import { JwtService } from '@nestjs/jwt';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -46,8 +47,26 @@ export class UserService {
         })
 
     }
-    
 
+    async update(id: number, updateUserDto: UpdateUserDto) {
+        const template = await this.userRepository.findOne({
+            where: { id },
+        });
+
+        if (!template) throw new BadRequestException("Can't Find The Template To Edit");
+
+        return await this.userRepository.update(id, updateUserDto);
+    }
+    
+    async remove(id: number) {
+        const user = await this.userRepository.findOne({
+            where: { id },
+        });
+
+        if (!user) throw new BadRequestException("Can't Find The Template To Delete");
+
+        return await this.userRepository.delete(+id);
+    }
     
     
 }

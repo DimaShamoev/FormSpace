@@ -24,7 +24,7 @@ export const TemplatePage: React.FunctionComponent = () => {
     const [openParams, setOpenParams] = useState<boolean>(false)
     const isAuth = useAuth()
     const { isAuthor } = useAuthor()
-    const { isAdmin, isUser } = useRole()
+    const { isAdmin } = useRole()
     const { user } = useUser()
     const { id } = useParams()
     const navigate = useNavigate()
