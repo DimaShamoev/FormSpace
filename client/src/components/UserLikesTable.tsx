@@ -71,7 +71,7 @@ const UserLikesTable: React.FunctionComponent<IUserLikesTable> = ({ likes }) => 
                                 disabled={selectedTemplateIds.length === 0}
                                 className={`bg-red-500 text-white xs-box-padding rounded-sm ${selectedTemplateIds.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
                             >
-                                Delete Selected
+                                Delete
                             </button>
                         </div>
                     </div>

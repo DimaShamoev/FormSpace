@@ -10,11 +10,14 @@ import { useUser } from "../hooks/useUser"
 
 interface TemplatesProps {
     templates: ITemplate[],
+    clickedParam: number | null
+    toggleParam: (templateId: number) => void
+    removeTemplate: (templateId: number) => void
     toggleLikes: (templateId: number, isLike: boolean) => void
     likeAlert: () => void
 }
 
-const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, toggleLikes, likeAlert }) => {
+const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, clickedParam, toggleParam, removeTemplate, toggleLikes, likeAlert }) => {
     const isAuth = useAuth()
     const { isAuthor } = useAuthor()
     const { isAdmin } = useRole()
@@ -44,9 +47,23 @@ const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, toggleL
                                     </p>
                                 </div>
                                 {(isAuth && isAuthor(template.user.id) || isAuth && isAdmin) && (
-                                    <span className="w-full flex justify-end text-xl cursor-pointer">
-                                        <HiDotsHorizontal />
-                                    </span>
+                                    <div className="params-btn flex justify-end text-xl cursor-pointer relative w-max" onClick={() => toggleParam(template.id)}>
+                                        <span><HiDotsHorizontal /></span>
+                                        <div className={`params-list ${clickedParam === template.id ? "active" : ""}`}>
+                                            <ul className={`absolute text-sm top-[15px] right-0 w-[100px] bg-slate-500 text-white sm-padding_1 transition-all ${clickedParam === template.id ? 'flex flex-col top-[20px]' : 'hidden'}`}>
+                                                <li
+                                                    className="sm-padding-box hover:bg-slate-300 hover:text-gray-600 sm-padding_1"
+                                                >
+                                                    <Link to={`edit-template/${template.id}`}>Edit</Link>
+                                                </li>
+
+                                                <li
+                                                    className="sm-padding-box hover:bg-slate-300 hover:text-gray-600 sm-padding_1"
+                                                    onClick={() => removeTemplate(template.id)}
+                                                >Delete</li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 )}
                             </div>
 
@@ -56,10 +73,7 @@ const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, toggleL
                                         <span
                                             className="flex items-center text-sm gap-0.5 cursor-pointer"
                                             onClick={() =>
-                                                toggleLikes(
-                                                    template.id,
-                                                    template.templateLikes.some((like) => like.user.id === user?.id)
-                                                )
+                                                toggleLikes(template.id, template.templateLikes.some((like) => like.user.id === user?.id))
                                             }
                                         >
                                             {template.templateLikes.some((like) => like.user.id === user?.id) ? (
