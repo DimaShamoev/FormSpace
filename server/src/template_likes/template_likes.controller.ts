@@ -40,4 +40,4 @@ export class TemplateLikesController {
         console.log('DELETE /:templateId called with token:', req.user);
         return this.templateLikesService.unlikeTemplate(+templateId, +req.user.id);
     }
-}
+}   

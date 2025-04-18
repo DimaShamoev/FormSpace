@@ -5,7 +5,7 @@ import { IDataUser } from "../Types/user/user.types"
 import { useLoaderData } from "react-router-dom"
 import { ILikes } from "../Types/likes/likes.types"
 import UserTemplatesTable from "../components/UserTemplatesTable"
-import UserLikesTable from "../components/UseLikesTable"
+import UserLikesTable from "../components/UserLikesTable"
 import UserResponsesTable from "../components/UserResponsesTable"
 
 export const userLoader = async () => {

@@ -3,6 +3,7 @@ import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
 import { ICreateTemplate, ITemplateFormData } from "../Types/templates/templates.types";
 import { request } from "../api/axios.api";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const CreateTemplate: React.FC = () => {
     const { control, handleSubmit, register } = useForm<ITemplateFormData>();
@@ -15,6 +16,7 @@ const CreateTemplate: React.FC = () => {
     const [description, setDescription] = useState("");
     const [tags, setTags] = useState("");
     const [status, setStatus] = useState("");
+    const navigate = useNavigate()
 
     const handleAddInputs = (type: ICreateTemplate["type"]) => {
         append({
@@ -45,18 +47,18 @@ const CreateTemplate: React.FC = () => {
         };
     
         try {
-            const response = await request.post("/templates", requestData);
-            console.log("Response:", response.data);
+            await request.post("/templates", requestData);
+            toast.success("Template Created Successfully")
+            navigate('/profile')
+
         } catch (err: any) {
             const error = err.response?.data.message
             toast.error(error.toString())
-        }
-    
-        console.log("Request Data:", JSON.stringify(requestData, null, 2));
+        }    
     };
 
     return (
-        <div className="flex flex-1 items-center justify-center">
+        <div className="flex flex-col flex-1 items-center justify-center">
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="box-padding bg-white space-y-6 flex flex-col gap-2 w-[600px] max-w-full"

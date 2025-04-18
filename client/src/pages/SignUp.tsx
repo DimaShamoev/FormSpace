@@ -29,7 +29,7 @@ const SignUp: React.FunctionComponent = () => {
         <div className="flex flex-col flex-1 items-center justify-center">
             <form
                 onSubmit={handleSubmit(registrationHandler)}
-                className="bg-white box-padding flex flex-col gap-3.5 min-w-[full] w-[400px]"
+                className=" box-padding flex flex-col gap-3.5 min-w-[full] w-[400px]"
             >   
                 <div className="form-title text-center text-2xl">
                     Sign Up

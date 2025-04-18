@@ -11,6 +11,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa6"
 import { LuNotebookPen } from "react-icons/lu"
 import { toast } from "react-toastify"
 import { IoIosArrowUp } from "react-icons/io"
+import React from "react"
 
 export const templatePageLoader = async ({ params }: LoaderFunctionArgs) => {
     const { data } = await request.get<ITemplate>(`templates/${params.id}`)
@@ -50,12 +51,18 @@ export const TemplatePage: React.FunctionComponent = () => {
     }
 
     const handleRemove = async () => {
-        await request.delete(`templates/${id}`)
-        navigate('/')
+        try {
+            await request.delete(`templates/${id}`)
+            toast.success("Template Deleted Successfully")
+            navigate('/')
+        } catch (err: any) {
+            const error = err.response?.data.message
+            toast.error(error.toString())
+        }
     }
 
     return (
-        <>
+        <div>
             {template.status === 'private' && !isAuthor(template.user.id) && !isAdmin ? (
                 "This Form Is Private"
             ) : (
@@ -72,8 +79,8 @@ export const TemplatePage: React.FunctionComponent = () => {
                                 </p>
                             </div>
                             {(isAuth && isAuthor(template?.user?.id)) || (isAuth && isAdmin) ? (
-                                <div className="params-btn w-full flex justify-end text-xl cursor-pointer relative">
-                                    <HiDotsHorizontal onClick={toggleParamsBtn} />
+                                <div className="params-btn flex justify-end text-xl cursor-pointer relative w-max">
+                                    <HiDotsHorizontal className="w-max" onClick={toggleParamsBtn} />
                                     <ul className={`absolute text-sm top-[15px] w-[100px] bg-slate-500 text-white sm-padding_1 transition-all ${openParams ? 'flex flex-col top-[20px]' : 'hidden'}`}>
                                         <li className="sm-padding-box hover:bg-slate-300 hover:text-gray-600 sm-padding_1">
                                             <button onClick={handleRemove}>Delete</button>
@@ -127,6 +134,9 @@ export const TemplatePage: React.FunctionComponent = () => {
                                 <Link to={`/fill-template/${template?.id}`}>Fill The Form</Link>
                             </div>
                         ) : null}
+                        {
+                            !isAuth && !isAuthor(template.id) && <Link to='../authorization' className="fill-btn bg-blue-500 w-max sm-box-padding rounded-md text-white cursor-pointer">Fill Form</Link>
+                        }
                     </div>
 
                     {isAuth && isAuthor(template.user.id) || isAuth && isAdmin ? (
@@ -159,9 +169,10 @@ export const TemplatePage: React.FunctionComponent = () => {
                             )}
                         </div>
                     ) : null}
+                    
                 </div>
             )}
-        </>
+        </div>
     )
 }
 

@@ -40,3 +40,7 @@ export interface ITemplateFormData {
     status: string;
     questions: ICreateTemplate[];
 }
+
+export interface IFillFormData {
+    answers: { value: string }[];
+};

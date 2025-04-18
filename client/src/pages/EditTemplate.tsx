@@ -94,15 +94,13 @@ const EditTemplate: React.FC = () => {
         };
 
         try {
-            const response = await request.patch(`/templates/${templateId}`, requestData);
+            await request.patch(`/templates/${templateId}`, requestData);
             toast.success("Template updated successfully!");
             navigate("/profile");
         } catch (err: any) {
             const error = err.response?.data.message;
             toast.error(error.toString());
         }
-
-        console.log("Request Data:", JSON.stringify(requestData, null, 2));
     };
 
     return (
