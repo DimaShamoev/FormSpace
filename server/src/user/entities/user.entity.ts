@@ -1,3 +1,4 @@
+import { Comment } from "src/comment/entities/comment.entity";
 import { Tag } from "src/tag/entities/tag.entity";
 import { TemplateResponse } from "src/template-response/entities/template-response.entity";
 import { Template } from "src/template/entities/template.entity";
@@ -35,6 +36,9 @@ export class User {
 
     @OneToMany(() => Tag, tag => tag.user)
     tags: Tag[]
+
+    @OneToMany(() => Comment, comment => comment.user)
+    comments: Comment[]
 
     @CreateDateColumn()
     createdAt: Date

@@ -4,7 +4,6 @@ import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class TemplateLike {
-
     @PrimaryGeneratedColumn({ name: 'like_id' })
     id: number
 

@@ -1,3 +1,4 @@
+import { Comment } from "src/comment/entities/comment.entity";
 import { Tag } from "src/tag/entities/tag.entity";
 import { TemplateResponse } from "src/template-response/entities/template-response.entity";
 import { TemplateLike } from "src/template_likes/entities/template_like.entity";
@@ -33,6 +34,9 @@ export class Template {
 
     @OneToMany(() => TemplateLike, templateLike => templateLike.template)
     templateLikes: TemplateLike[]
+
+    @OneToMany(() => Comment, comment => comment.template)
+    comments: Comment[]
 
     @OneToMany(() => Tag, tag => tag.template)
     tags: Tag[];

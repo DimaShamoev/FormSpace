@@ -8,7 +8,7 @@ import { User } from 'src/user/entities/user.entity';
 import { TemplateModule } from 'src/template/template.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([TemplateLike, Template, User]), TemplateModule],
+    imports: [TypeOrmModule.forFeature([TemplateLike, Template, User])],
     controllers: [TemplateLikesController],
     providers: [TemplateLikesService],  
 })
