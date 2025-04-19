@@ -38,7 +38,7 @@ export class Template {
     @OneToMany(() => Comment, comment => comment.template)
     comments: Comment[]
 
-    @OneToMany(() => Tag, tag => tag.template)
+    @OneToMany(() => Tag, tag => tag.template, {nullable: true})
     tags: Tag[];
 
     @CreateDateColumn()

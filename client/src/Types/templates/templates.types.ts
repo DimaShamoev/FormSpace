@@ -1,3 +1,4 @@
+import { IComments } from "../comments/comments.types";
 import { ILikes } from "../likes/likes.types";
 import { ITags } from "../tags/tags.types";
 import { IUser, IUserInfo } from "../user/user.types";
@@ -13,6 +14,7 @@ export interface ITemplate {
     tags: ITags[];
     templateLikes: ILikes[];
     template_responses: ITemplateResponses[];
+    comments: IComments[]
     createdAt: Date;
 }
 
@@ -39,6 +41,8 @@ export interface ITemplateFormData {
     tags: string;
     status: string;
     questions: ICreateTemplate[];
+    type: QuestionType
+
 }
 
 export interface IFillFormData {

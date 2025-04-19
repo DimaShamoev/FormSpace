@@ -16,7 +16,6 @@ const EditTemplate: React.FC = () => {
     const [description, setDescription] = useState<string>("");
     const [tags, setTags] = useState<string>("");
     const [status, setStatus] = useState<string>("");
-    const [answers, setAnswers] = useState<ITemplateResponses[]>([])
 
     const navigate = useNavigate();
     const { templateId } = useParams();
@@ -31,7 +30,6 @@ const EditTemplate: React.FC = () => {
                 setDescription(template.description);
                 setTags(template.tags.join(", "));
                 setStatus(template.status);
-                setAnswers(template.answers)
 
                 setValue("title", template.title);
                 setValue("description", template.description);

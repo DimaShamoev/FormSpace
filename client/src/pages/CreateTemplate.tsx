@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { ITags } from "../Types/tags/tags.types";
 import CreateTagModal from "../components/modals/CreateTagModal";
-import { IoClose } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
 
 const CreateTemplate: React.FC = () => {

@@ -12,6 +12,7 @@ import { LuNotebookPen } from "react-icons/lu"
 import { toast } from "react-toastify"
 import { IoIosArrowUp } from "react-icons/io"
 import React from "react"
+import { IComments } from "../Types/comments/comments.types"
 
 export const templatePageLoader = async ({ params }: LoaderFunctionArgs) => {
     const { data } = await request.get<ITemplate>(`templates/${params.id}`)
@@ -22,6 +23,7 @@ export const TemplatePage: React.FunctionComponent = () => {
     const [template, setTemplate] = useState(useLoaderData() as ITemplate)
     const [responseOpen, setResponseOpen] = useState<boolean>(false)
     const [openParams, setOpenParams] = useState<boolean>(false)
+    const [comment, setComment] = useState<string>('')
     const isAuth = useAuth()
     const { isAuthor } = useAuthor()
     const { isAdmin } = useRole()
@@ -58,6 +60,23 @@ export const TemplatePage: React.FunctionComponent = () => {
         } catch (err: any) {
             const error = err.response?.data.message
             toast.error(error.toString())
+        }
+    }
+
+    const handleComment = async () => {
+        if (!comment.trim()) {
+            toast.warn("Comment Can't Be Empty")
+            return
+        }
+
+        try {
+            await request.post<IComments>(`comments/${template.id}`, {comment: comment})
+            toast.success("Comment Posted Successfully")
+            const { data } = await request.get<ITemplate>(`templates/${id}`)
+            setTemplate(data)
+            setComment('')
+        } catch (error: any) {
+            toast.error(error.response?.data?.message) 
         }
     }
 
@@ -139,7 +158,7 @@ export const TemplatePage: React.FunctionComponent = () => {
                         }
                     </div>
 
-                    {isAuth && isAuthor(template.user.id) || isAuth && isAdmin ? (
+                    {isAuth && isAuthor(template.user.id) || isAuth && isAdmin && (
                         <div className={`flex flex-col gap-4 bg-white box-padding h-[48px] overflow-hidden transition-all ${responseOpen ? 'h-full' : ''}`}>
                             <p className="flex items-center justify-between">
                                 <span className="responses-title text-xl">Responses On Form</span>
@@ -168,8 +187,44 @@ export const TemplatePage: React.FunctionComponent = () => {
                                 <p className="text-gray-500">There No Responses On Form</p>
                             )}
                         </div>
-                    ) : null}
-                    
+                    )}
+
+                    { isAuth && (
+                        <div className="upload-comment box-padding bg-white flex flex-col gap-3 h-auto">
+                            <div className="title">
+                                Leave Your Comment
+                            </div>
+                            <div className="input-block grid grid-cols-[90%10%] gap-2">
+                                <input
+                                    placeholder="Enter Your Comment"
+                                    className="border-2 rounded-sm xs-box-padding text-sm"
+                                    onChange={(e) => setComment(e.target.value)}
+                                />
+                                <button
+                                    type="submit"
+                                    className="text-sm bg-blue-700 xs-box-padding text-white rounded-sm cursor-pointer"
+                                    onClick={handleComment}
+                                >
+                                    Leave Comment
+                                </button>
+                            </div>
+                        </div>
+                    ) }
+
+                    <div className="comments flex flex-col gap-4 bg-white box-padding">
+                        <div className="comment-title text-xl">Comments</div>
+                        {template.comments.map((comment) =>(
+                            <div className="comments-list bg-gray-200 xs-box-padding">
+                                <div className="comment-author text-xs text-gray-500">
+                                    <span className="text-md">{comment.user.email}</span> <span>●</span> <span className="text-[10px]">{new Date(comment.createdAt).toLocaleString('en')}</span>
+                                </div>
+                                <div className="comment-text">
+                                    {comment.comment}
+                                </div>
+                            </div>
+                        ))}
+
+                    </div>                    
                 </div>
             )}
         </div>
