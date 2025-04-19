@@ -16,6 +16,7 @@ import TemplatePage, { templatePageLoader } from "../pages/TemplatePage";
 import AdminLayout from "../admin/components/AdminLayout";
 import TemplatesTable, { templatesLoaderAdmin } from "../admin/pages/TemplatesTable";
 import UsersTable, { usersLoaderAdmin } from "../admin/pages/UsersTable";
+import CommentsTable, { CommentsLoaderAdmin } from "../admin/pages/CommentsTable";
 
 export const routes = createBrowserRouter([
     {
@@ -82,6 +83,11 @@ export const routes = createBrowserRouter([
                         element: <TemplatesTable />,
                         loader: templatesLoaderAdmin
                     },
+                    {
+                        path: "comments-list",
+                        element: <CommentsTable />,
+                        loader: CommentsLoaderAdmin
+                    }
                 ],
             },
         ],

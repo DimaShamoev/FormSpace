@@ -15,10 +15,12 @@ export class TemplateService {
         return this.templateRepository.find({
             relations: [
                 'user',
-                'tags',
                 'template_responses',
                 'template_responses.user',
                 'template_responses.template',
+                'comments',
+                'comments.user',
+                'comments.template',
                 'templateLikes',
                 'templateLikes.user',
                 'templateLikes.template',
@@ -38,7 +40,8 @@ export class TemplateService {
                 user: true,
                 tags: true,
                 templateLikes: true,
-                template_responses: true
+                template_responses: true,
+                comments: true
             }
         });
     }
@@ -48,10 +51,12 @@ export class TemplateService {
             where: { id },
             relations: [
                 'user',
-                'tags',
                 'template_responses',
                 'template_responses.user',
                 'template_responses.template',
+                'comments',
+                'comments.user',
+                'comments.template',
                 'templateLikes',
                 'templateLikes.user',
                 'templateLikes.template',

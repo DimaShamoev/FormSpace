@@ -38,11 +38,7 @@ const UserResponsesTable: React.FunctionComponent<IUserResponsesTable> = ({ resp
 
     const handleDeleteSelected = async () => {
         try {
-            await Promise.all(
-                selectedResponseIds.map(id =>
-                    request.delete(`template-responses/${id}`)
-                )
-            )
+            selectedResponseIds.map(id => request.delete(`template-responses/${id}`))
             toast.success("Selected responses removed successfully.")
             window.location.reload()
         } catch (err: any) {

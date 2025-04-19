@@ -18,8 +18,7 @@ const UserLikesTable: React.FunctionComponent<IUserLikesTable> = ({ likes }) => 
     }
 
     const handleCheckboxChange = (templateId: number) => {
-        setSelectedTemplateIds((prevSelected) => prevSelected.includes(templateId) ? prevSelected.filter((id) => id !== templateId) : [...prevSelected, templateId]
-)
+        setSelectedTemplateIds((prevSelected) => prevSelected.includes(templateId) ? prevSelected.filter((id) => id !== templateId) : [...prevSelected, templateId])
     }
 
     const areAllSelected = selectedTemplateIds.length === likes.length
@@ -35,11 +34,7 @@ const UserLikesTable: React.FunctionComponent<IUserLikesTable> = ({ likes }) => 
 
     const handleDeleteSelected = async () => {
         try {
-            await Promise.all(
-                selectedTemplateIds.map(id =>
-                    request.delete(`template-likes/${id}`)
-                )
-            )
+            selectedTemplateIds.map(id => request.delete(`template-likes/${id}`))
             toast.success("Selected likes removed successfully.")
             window.location.reload()
         } catch (err: any) {

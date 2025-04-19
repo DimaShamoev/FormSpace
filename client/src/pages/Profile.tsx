@@ -9,6 +9,8 @@ import UserLikesTable from "../components/UserLikesTable"
 import UserResponsesTable from "../components/UserResponsesTable"
 import UserTagsTable from "../components/UserTagsTable"
 import { ITags } from "../Types/tags/tags.types"
+import { IComments } from "../Types/comments/comments.types"
+import UserCommentsTable from "../components/UserCommentsTable"
 
 export const userLoader = async () => {
     const { data } = await request.get<IDataUser>(`auth/profile`)
@@ -20,6 +22,7 @@ const Profile = () => {
     const userData = useLoaderData() as IDataUser
     const [templates, setTemplates] = useState<ITemplate[]>([])
     const [responses, setResponses] = useState<ITemplateResponses[]>([])
+    const [comments, setComments] = useState<IComments[]>([])
     const [likes, setLikes] = useState<ILikes[]>([])
     const [tags, setTags] = useState<ITags[]>([])
 
@@ -28,9 +31,11 @@ const Profile = () => {
         const responses = await request.get('template-responses')
         const likes = await request.get('template-likes')
         const tags = await request.get('tags')
+        const comments = await request.get('comments')
 
         setTemplates(templates.data)
         setResponses(responses.data)
+        setComments(comments.data)
         setLikes(likes.data)
         setTags(tags.data)
     }
@@ -55,6 +60,9 @@ const Profile = () => {
             </div>
             <div className="responses box-padding bg-white">
                 <UserResponsesTable responses={responses} />
+            </div>
+            <div className="comments box-padding bg-white">
+                <UserCommentsTable comments={comments} />
             </div>
             <div className="likes box-padding bg-white">
                 <UserLikesTable likes={likes} />

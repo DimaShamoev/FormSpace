@@ -15,6 +15,9 @@ const AdminHeader: React.FunctionComponent = () => {
                     <li>
                         <NavLink className={({isActive}) => `nav-link ${isActive ? 'nav-link-active' : ''}`} to='templates-list'>Templates</NavLink>
                     </li>
+                    <li>
+                        <NavLink className={({isActive}) => `nav-link ${isActive ? 'nav-link-active' : ''}`} to='comments-list'>Comments</NavLink>
+                    </li>
                 </ul>
             </nav>
         </div>
