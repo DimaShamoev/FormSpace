@@ -44,6 +44,10 @@ body {
     padding-right: 30px;
 }
 
+.mt-lg {
+    margin: 70px 0 30px 0;
+}
+
 /* Header */
 /* Links */
 .nav-link {

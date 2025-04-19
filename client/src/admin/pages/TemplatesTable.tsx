@@ -1,8 +1,9 @@
 import { Link, useLoaderData } from "react-router-dom"
 import { request } from "../../api/axios.api"
 import { ITemplate } from "../../Types/templates/templates.types"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { toast } from "react-toastify"
+import useDebounce from "../../hooks/useDebounce"
 
 export const templatesLoaderAdmin = async () => {
     const { data } = await request.get('templates/all-templates')
@@ -13,8 +14,10 @@ const TemplatesTable: React.FunctionComponent = () => {
 
     const templates = useLoaderData() as ITemplate[]
     const [selectedTemplates, setSelectedTemplates] = useState<number[]>([])
+    const [searchQuery, setSearchQuery] = useState<string>("")
 
     const allTemplatesSelected = selectedTemplates?.length === templates.length
+    const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
     const handleCheckboxChange = (templateId: number) => {
         setSelectedTemplates((prev) => prev?.includes(templateId) ? prev.filter((id) => id !== templateId) : [...prev, templateId])
@@ -56,6 +59,14 @@ const TemplatesTable: React.FunctionComponent = () => {
         }
     }
 
+    const filteredTemplates = useMemo(() => {
+        return templates.filter(template =>
+            template.title.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+            template.description.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+            template.user.email.toLocaleLowerCase().includes(debouncedSearchQuery.toLocaleLowerCase())
+        )
+    }, [debouncedSearchQuery, templates])
+
     return (
         <div className="flex flex-col gap-4 bg-white box-padding">
             <div className="admins-toolbar flex justify-between">
@@ -79,6 +90,7 @@ const TemplatesTable: React.FunctionComponent = () => {
                         type="text"
                         placeholder="Find Template"
                         className="border-2 xs-box-padding border-black rounded-md"
+                        onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
             </div>
@@ -104,7 +116,7 @@ const TemplatesTable: React.FunctionComponent = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {templates.map((template) => (
+                        {filteredTemplates.map((template) => (
                             <tr key={template.id}>
                                 <td>
                                     <input

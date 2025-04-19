@@ -52,18 +52,21 @@ export class TagService {
             throw new BadRequestException("This Tag Already Exist");
         }
     
-        const template = await this.templateRepository.findOne({
-            where: { id: createTagDto.templateId },
-        });
+        let template;
+        if (createTagDto.templateId) {
+            template = await this.templateRepository.findOne({
+                where: { id: createTagDto.templateId },
+            });
     
-        if (!template) {
-            throw new BadRequestException("Template not found");
+            if (!template) {
+                throw new BadRequestException("Template not found");
+            }
         }
     
         const newTag = {
             title: createTagDto.title,
             user: { id: userId },
-            template: { id: createTagDto.templateId },
+            template: template ? { id: createTagDto.templateId } : null, // only add template if it exists
         };
     
         return await this.tagRepository.save(newTag);

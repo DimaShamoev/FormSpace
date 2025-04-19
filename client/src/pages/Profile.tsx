@@ -7,6 +7,8 @@ import { ILikes } from "../Types/likes/likes.types"
 import UserTemplatesTable from "../components/UserTemplatesTable"
 import UserLikesTable from "../components/UserLikesTable"
 import UserResponsesTable from "../components/UserResponsesTable"
+import UserTagsTable from "../components/UserTagsTable"
+import { ITags } from "../Types/tags/tags.types"
 
 export const userLoader = async () => {
     const { data } = await request.get<IDataUser>(`auth/profile`)
@@ -19,14 +21,18 @@ const Profile = () => {
     const [templates, setTemplates] = useState<ITemplate[]>([])
     const [responses, setResponses] = useState<ITemplateResponses[]>([])
     const [likes, setLikes] = useState<ILikes[]>([])
+    const [tags, setTags] = useState<ITags[]>([])
 
     const getTemplates = async () => {
         const templates = await request.get('templates')
         const responses = await request.get('template-responses')
         const likes = await request.get('template-likes')
+        const tags = await request.get('tags')
+
         setTemplates(templates.data)
         setResponses(responses.data)
         setLikes(likes.data)
+        setTags(tags.data)
     }
 
     useEffect(() => {
@@ -47,13 +53,15 @@ const Profile = () => {
             <div className="templates box-padding bg-white">
                 <UserTemplatesTable templates={templates} />
             </div>
-            <div className="likes box-padding bg-white">
-                <UserLikesTable likes={likes} />
-            </div>
             <div className="responses box-padding bg-white">
                 <UserResponsesTable responses={responses} />
             </div>
-
+            <div className="likes box-padding bg-white">
+                <UserLikesTable likes={likes} />
+            </div>
+            <div className="tags box-padding bg-white">
+                <UserTagsTable tags={tags} />
+            </div>
         </div>
     )
 }

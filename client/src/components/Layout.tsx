@@ -9,7 +9,7 @@ const Layout = () => {
 
             <Header />
             <Aside />
-            <main className="box-padding bg-slate-200 layout flex-1 flex flex-col">
+            <main className="box-padding bg-slate-200 flex-1 flex flex-col">
                 <Outlet />
             </main>
             <Footer />

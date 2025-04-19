@@ -1,8 +1,9 @@
 import { useLoaderData } from "react-router-dom"
 import { request } from "../../api/axios.api"
 import { IUserInfo } from "../../Types/user/user.types"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { toast } from "react-toastify"
+import useDebounce from "../../hooks/useDebounce"
 
 export const usersLoaderAdmin = async () => {
     const { data } = await request.get('users')
@@ -13,8 +14,10 @@ const UsersTable: React.FunctionComponent = () => {
 
     const users = useLoaderData() as IUserInfo[]
     const [selectedUsers, setSelectedUsers] = useState<number[]>([])
+    const [searchQuery, setSearchQuery] = useState<string>("")
 
     const allUsersSelected = selectedUsers?.length === users.length
+    const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
     const handleCheckboxChange = (userId: number) => {
         setSelectedUsers((prev) =>
@@ -53,6 +56,14 @@ const UsersTable: React.FunctionComponent = () => {
         }
     }
 
+    const searchFilteredUsers = useMemo(() => {
+        return users.filter(user =>
+            user.first_name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+            user.last_name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+            user.email.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) 
+        )
+    }, [debouncedSearchQuery, users])
+
     return (
         <div className="flex flex-col gap-4 bg-white box-padding">
             <div className="admins-toolbar flex justify-between">
@@ -75,6 +86,7 @@ const UsersTable: React.FunctionComponent = () => {
                         type="text"
                         placeholder="Find User"
                         className="border-2 xs-box-padding border-black rounded-md"
+                        onChange={(e) => setSearchQuery(e.target.value)}
                     />
                 </div>
             </div>
@@ -96,7 +108,7 @@ const UsersTable: React.FunctionComponent = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map((user) =>
+                        {searchFilteredUsers.map((user) =>
                             user.role !== 'admin' ? (
                                 <tr key={user.id}>
                                     <td>

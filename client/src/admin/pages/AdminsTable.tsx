@@ -1,8 +1,9 @@
 import { useLoaderData } from "react-router-dom"
 import { request } from "../../api/axios.api"
 import { IUserInfo } from "../../Types/user/user.types"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { toast } from "react-toastify"
+import useDebounce from "../../hooks/useDebounce"
 
 export const adminsLoader = async () => {
     const { data } = await request.get('users')
@@ -12,6 +13,9 @@ export const adminsLoader = async () => {
 const AdminsTable: React.FunctionComponent = () => {
     const admins = useLoaderData() as IUserInfo[]
     const [selectedAdmins, setSelectedAdmins] = useState<number[]>([])
+    const [searchQuery, setSearchQuery] = useState<string>('')
+
+    const debouncedSearchQuery = useDebounce(searchQuery, 500)
 
     const filteredAdmins = admins.filter(admin => admin.role === 'admin')
     const allAdminsSelected = selectedAdmins.length === filteredAdmins.length
@@ -54,6 +58,14 @@ const AdminsTable: React.FunctionComponent = () => {
         }
     }
 
+    const searchFilteredAdmin = useMemo(() => {
+        return filteredAdmins.filter((admin) =>
+            admin.first_name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+            admin.last_name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+            admin.email.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+        )
+    }, [debouncedSearchQuery, admins])
+
     return (
         <div className="flex flex-col gap-4 bg-white box-padding">
             <div className="admins-toolbar flex justify-between">
@@ -76,6 +88,7 @@ const AdminsTable: React.FunctionComponent = () => {
                         type="text"
                         placeholder="Find Admin"
                         className="border-2 xs-box-padding border-black rounded-md"
+                        onChange={(e) => setSearchQuery((e.target.value))}
                     />
                 </div>
             </div>
@@ -97,7 +110,7 @@ const AdminsTable: React.FunctionComponent = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredAdmins.map((admin) => (
+                        {searchFilteredAdmin.map((admin) => (
                             <tr key={admin.id}>
                                 <td>
                                     <input
