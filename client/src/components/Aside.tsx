@@ -26,6 +26,7 @@ const Aside: React.FunctionComponent = () => {
         dispatch(logOut())
         removeToken('token')
         navigate('/')
+        setAside()
     }
 
     return (
@@ -86,7 +87,7 @@ const Aside: React.FunctionComponent = () => {
                             <li>
                                 <button
                                     className='aside-link cursor-pointer'
-                                    onClick={() => (logoutHandler)}
+                                    onClick={logoutHandler}
                                     
                                 >
                                     <ImExit /> Log Out

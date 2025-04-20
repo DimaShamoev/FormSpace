@@ -29,10 +29,10 @@ const CreateTagModal: React.FunctionComponent<ICreateTagModal> = ({ isModalOpen,
     };
 
     return (
-        <div className={`absolute inset-0 ${isModalOpen ? 'flex' : 'hidden'}`}>
+        <div className={`fixed inset-0 ${isModalOpen ? 'flex' : 'hidden'}`}>
             <div className="layout inset-0 bg-black/50 h-full w-full relative" onClick={handleModalOpen}></div>
             <div className="form-wrapper">
-                <div className="absolute top-[50%] left-[50%] translate-[-50%] bg-white box-padding flex flex-col gap-2 rounded-md w-[300px] max-w-[100%]">
+                <form className="absolute top-[50%] left-[50%] translate-[-50%] bg-white box-padding flex flex-col gap-2 rounded-md w-[300px] max-w-[100%]">
                     <div className="close flex justify-end xs-box-padding cursor-pointer">
                         <IoClose onClick={handleModalOpen} />
                     </div>
@@ -64,7 +64,7 @@ const CreateTagModal: React.FunctionComponent<ICreateTagModal> = ({ isModalOpen,
                             Create
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     );

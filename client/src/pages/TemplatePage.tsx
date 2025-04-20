@@ -13,6 +13,8 @@ import { toast } from "react-toastify"
 import { IoIosArrowUp } from "react-icons/io"
 import React from "react"
 import { IComments } from "../Types/comments/comments.types"
+import { BiComment } from "react-icons/bi"
+import EditCommentModal from "../components/modals/EditCommentModal"
 
 export const templatePageLoader = async ({ params }: LoaderFunctionArgs) => {
     const { data } = await request.get<ITemplate>(`templates/${params.id}`)
@@ -23,7 +25,9 @@ export const TemplatePage: React.FunctionComponent = () => {
     const [template, setTemplate] = useState(useLoaderData() as ITemplate)
     const [responseOpen, setResponseOpen] = useState<boolean>(false)
     const [openParams, setOpenParams] = useState<boolean>(false)
+    const [openCommentParams, setCommentParams] = useState<number | null>(null)
     const [comment, setComment] = useState<string>('')
+    const [isCommentEdit, setIsCommentEdit] = useState<boolean>(false)
     const isAuth = useAuth()
     const { isAuthor } = useAuthor()
     const { isAdmin } = useRole()
@@ -52,11 +56,31 @@ export const TemplatePage: React.FunctionComponent = () => {
         setOpenParams(prev => !prev)
     }
 
+    const toggleCommentsParamsBtn = (commentId: number) => {
+        setCommentParams(prev => (prev === commentId ? null : commentId))
+    }
+
+    const toggleEditCommentModal = () => {
+        setIsCommentEdit(prev => !prev)
+        setCommentParams(null)
+    }
+
     const handleRemove = async () => {
         try {
             await request.delete(`templates/${id}`)
             toast.success("Template Deleted Successfully")
             navigate('/')
+        } catch (err: any) {
+            const error = err.response?.data.message
+            toast.error(error.toString())
+        }
+    }
+
+    const handleCommentRemove = async (commentId: number) => {
+        try {
+            await request.delete(`comments/${commentId}`)
+            toast.success("Comment Deleted Successfully")
+            window.location.reload()
         } catch (err: any) {
             const error = err.response?.data.message
             toast.error(error.toString())
@@ -86,6 +110,7 @@ export const TemplatePage: React.FunctionComponent = () => {
                 "This Form Is Private"
             ) : (
                 <div className="flex flex-col gap-4">
+                    <EditCommentModal isEdit={isCommentEdit} toggleIsEdit={toggleEditCommentModal} />
                     <div className="bg-white box-padding template-main-info flex flex-col gap-3">
                         <div className="template-upper-row flex items-start">
                             <div className="template-info w-full">
@@ -142,6 +167,10 @@ export const TemplatePage: React.FunctionComponent = () => {
                                     </span>
                                 )}
 
+                                <span className="flex items-center text-sm gap-0.5 font-bold">
+                                    <BiComment /> {template.comments.length}
+                                </span>
+                                
                                 <span className="flex items-center text-sm gap-0.5">
                                     <LuNotebookPen className="text-md" /> {template?.template_responses?.length}
                                 </span>
@@ -158,7 +187,7 @@ export const TemplatePage: React.FunctionComponent = () => {
                         }
                     </div>
 
-                    {isAuth && isAuthor(template.user.id) || isAuth && isAdmin && (
+                    {isAuth && isAuthor(template.user.id) || isAuth && isAdmin ? (
                         <div className={`flex flex-col gap-4 bg-white box-padding h-[48px] overflow-hidden transition-all ${responseOpen ? 'h-full' : ''}`}>
                             <p className="flex items-center justify-between">
                                 <span className="responses-title text-xl">Responses On Form</span>
@@ -187,7 +216,7 @@ export const TemplatePage: React.FunctionComponent = () => {
                                 <p className="text-gray-500">There No Responses On Form</p>
                             )}
                         </div>
-                    )}
+                    ) : null}
 
                     { isAuth && (
                         <div className="upload-comment box-padding bg-white flex flex-col gap-3 h-auto">
@@ -214,9 +243,26 @@ export const TemplatePage: React.FunctionComponent = () => {
                     <div className="comments flex flex-col gap-4 bg-white box-padding">
                         <div className="comment-title text-xl">Comments</div>
                         {template.comments.map((comment) =>(
-                            <div className="comments-list bg-gray-200 xs-box-padding">
-                                <div className="comment-author text-xs text-gray-500">
-                                    <span className="text-md">{comment.user.email}</span> <span>●</span> <span className="text-[10px]">{new Date(comment.createdAt).toLocaleString('en')}</span>
+                            <div key={comment.id} className="comments-list bg-gray-200 xs-box-padding">
+                                <div className="comment-author text-xs text-gray-500 flex items-center justify-between">
+                                    <div>
+                                        <span className="text-md">{comment.user.email}</span> <span>●</span> <span className="text-[10px]">{new Date(comment.createdAt).toLocaleString('en')}</span>
+                                    </div>
+                                    { isAuth && isAuthor(comment.user.id) || isAuth && isAdmin ? (
+                                        <div className="text-lg cursor-pointer relative" key={comment.id}>
+                                            <span onClick={() => toggleCommentsParamsBtn(comment.id)}><HiDotsHorizontal /></span>
+                                            <div>
+                                                <ul className={`absolute text-sm top-[15px] right-0 w-[100px] bg-slate-500 text-white sm-padding_1 transition-all ${openCommentParams === comment.id ? 'flex flex-col top-[20px]' : 'hidden'}`}>
+                                                    <li className="sm-padding-box hover:bg-slate-300 hover:text-gray-600 sm-padding_1">
+                                                        <button onClick={() => handleCommentRemove(comment.id)}>Delete</button>
+                                                    </li>
+                                                    <li className="sm-padding-box hover:bg-slate-300 hover:text-gray-600 sm-padding_1">
+                                                        <button onClick={toggleEditCommentModal}>Edit</button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    ) : null}
                                 </div>
                                 <div className="comment-text">
                                     {comment.comment}

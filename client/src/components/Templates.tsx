@@ -7,6 +7,7 @@ import { HiDotsHorizontal } from "react-icons/hi"
 import { FaHeart, FaRegHeart } from "react-icons/fa6"
 import { LuNotebookPen } from "react-icons/lu"
 import { useUser } from "../hooks/useUser"
+import { BiComment } from "react-icons/bi"
 
 interface TemplatesProps {
     templates: ITemplate[],
@@ -94,6 +95,10 @@ const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, clicked
                                             <FaRegHeart className="text-md" /> {template.templateLikes.length}
                                         </span>
                                     )}
+
+                                    <span className="flex items-center text-sm gap-0.5 font-bold">
+                                        <BiComment /> {template.comments.length}
+                                    </span>
 
                                     <span className="flex items-center text-sm gap-0.5">
                                         <LuNotebookPen className="text-md" /> {template.template_responses.length}
