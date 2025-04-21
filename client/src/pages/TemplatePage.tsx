@@ -35,6 +35,8 @@ export const TemplatePage: React.FunctionComponent = () => {
     const { id } = useParams()
     const navigate = useNavigate()
 
+    console.log(openCommentParams)
+
     const toggleLikes = async (isLike: boolean) => {
         if (!id) return
 
@@ -62,7 +64,7 @@ export const TemplatePage: React.FunctionComponent = () => {
 
     const toggleEditCommentModal = () => {
         setIsCommentEdit(prev => !prev)
-        setCommentParams(null)
+        // setCommentParams(null)  
     }
 
     const handleRemove = async () => {
@@ -104,13 +106,33 @@ export const TemplatePage: React.FunctionComponent = () => {
         }
     }
 
+    const handleEditComment = async (editedText: string) => {
+        if (!openCommentParams) return
+
+        try {
+            await request.patch<IComments>(`comments/edit/${openCommentParams}`, { comment: editedText })
+            toast.success('Comment Edited Successfully')
+            const { data } = await request.get<ITemplate>(`templates/${id}`);
+            setTemplate(data);
+            setIsCommentEdit(false)
+        } catch (error: any) {
+            toast.error(error.response?.data?.message);
+        }
+    }
+
     return (
         <div>
             {template.status === 'private' && !isAuthor(template.user.id) && !isAdmin ? (
                 "This Form Is Private"
             ) : (
                 <div className="flex flex-col gap-4">
-                    <EditCommentModal isEdit={isCommentEdit} toggleIsEdit={toggleEditCommentModal} />
+                    <EditCommentModal
+                        isEdit={isCommentEdit}
+                        toggleIsEdit={toggleEditCommentModal}
+                        handleEditComment={handleEditComment}
+                        setCommentParams={setCommentParams}
+                    />
+
                     <div className="bg-white box-padding template-main-info flex flex-col gap-3">
                         <div className="template-upper-row flex items-start">
                             <div className="template-info w-full">
@@ -168,7 +190,7 @@ export const TemplatePage: React.FunctionComponent = () => {
                                 )}
 
                                 <span className="flex items-center text-sm gap-0.5 font-bold">
-                                    <BiComment /> {template.comments.length}
+                                    <BiComment /> {template?.comments.length}
                                 </span>
                                 
                                 <span className="flex items-center text-sm gap-0.5">
@@ -253,10 +275,10 @@ export const TemplatePage: React.FunctionComponent = () => {
                                             <span onClick={() => toggleCommentsParamsBtn(comment.id)}><HiDotsHorizontal /></span>
                                             <div>
                                                 <ul className={`absolute text-sm top-[15px] right-0 w-[100px] bg-slate-500 text-white sm-padding_1 transition-all ${openCommentParams === comment.id ? 'flex flex-col top-[20px]' : 'hidden'}`}>
-                                                    <li className="sm-padding-box hover:bg-slate-300 hover:text-gray-600 sm-padding_1">
+                                                    <li className="hover:bg-slate-300 hover:text-gray-600 sm-padding_1 z-[1]">
                                                         <button onClick={() => handleCommentRemove(comment.id)}>Delete</button>
                                                     </li>
-                                                    <li className="sm-padding-box hover:bg-slate-300 hover:text-gray-600 sm-padding_1">
+                                                    <li className="hover:bg-slate-300 hover:text-gray-600 sm-padding_1 z-[1]">
                                                         <button onClick={toggleEditCommentModal}>Edit</button>
                                                     </li>
                                                 </ul>
