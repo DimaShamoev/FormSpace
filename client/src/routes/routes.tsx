@@ -17,6 +17,7 @@ import AdminLayout from "../admin/components/AdminLayout";
 import TemplatesTable, { templatesLoaderAdmin } from "../admin/pages/TemplatesTable";
 import UsersTable, { usersLoaderAdmin } from "../admin/pages/UsersTable";
 import CommentsTable, { CommentsLoaderAdmin } from "../admin/pages/CommentsTable";
+import EditTemplateResponse, { editTemplateResponseLoader } from "../pages/EditTemplateResponse";
 
 export const routes = createBrowserRouter([
     {
@@ -42,6 +43,11 @@ export const routes = createBrowserRouter([
                 path: "fill-template/:id",
                 element: <ProtectedRoute><FillTemplate /></ProtectedRoute>,
                 loader: fillTemplateLoader,
+            },
+            {
+                path: "template/:templateId/edit-filled-template/:responseId",
+                element: <ProtectedRoute><EditTemplateResponse /></ProtectedRoute>,
+                loader: editTemplateResponseLoader
             },
             {
                 path: "template/:id",

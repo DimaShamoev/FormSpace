@@ -110,7 +110,9 @@ export const TemplatePage: React.FunctionComponent = () => {
                         handleEditComment={handleEditComment}
                         setCommentParams={setCommentParams}
                     />
-                    
+
+                    {template.template_responses.map((response) => response.user.id === user?.id ? (response.answers.map((answer) => <p>{answer}</p>)) : 'you`re not owner')}
+
                 </div>
             )}
         </div>
