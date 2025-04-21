@@ -62,10 +62,8 @@ const CreateTemplate: React.FC = () => {
                     : question.answer,
             })),
             status,
-            tags: selectedTag ? [{ id: +selectedTag }] : [],
+            tags: selectedTag ? [parseInt(selectedTag.toString(), 10)] : [],
         };
-    
-        console.log(requestData);
     
         try {
             await request.post("/templates", requestData);
@@ -172,54 +170,58 @@ const CreateTemplate: React.FC = () => {
                 </div>
 
                 <div className="form-body flex flex-col gap-4">
-                    {fields.map((field, index) => (
-                        <div key={field.id} className="question-block flex flex-col gap-2">
-                            <label className="block font-medium mb-1">
-                                Question #{index + 1}
-                            </label>
+                {fields.map((field, index) => (
+                    <div key={field.id} className="question-block flex flex-col gap-2">
+                        <div className="block font-medium mb-1">
+                            Question #{index + 1}
+                        </div>
+
+                        <div>
+                            {/* Question input is required */}
+                            <input
+                                {...register(`questions.${index}.question`, { required: "Question is required" })}
+                                className={`border-2 w-full rounded xs-box-padding text-sm`}
+                                placeholder="Enter your question"
+                            />
+                            {errors.questions?.[index]?.question && (
+                                <span className="text-red-500 text-xs">
+                                    {errors.questions[index]?.question?.message}
+                                </span>
+                            )}
+                        </div>
+
+                        {field.type === "checkbox" && (
+                            <div className="flex flex-col gap-2">
+                                {/* Options for checkbox are required */}
+                                {field.options?.map((_, optIndex) => (
+                                    <input
+                                        key={optIndex}
+                                        type="text"
+                                        {...register(`questions.${index}.options.${optIndex}`, { required: "Option is required" })}
+                                        className={`border-2 w-full rounded xs-box-padding text-sm`}
+                                        placeholder={`Option ${optIndex + 1}`}
+                                    />
+                                ))}
+                            </div>
+                        )}
+
+                        {field.type !== "checkbox" && (
                             <div>
+                                {/* Answer is now optional */}
                                 <input
-                                    {...register(`questions.${index}.question`, { required: "Question is required" })}
+                                    {...register(`questions.${index}.answer`)} // No 'required' validation here
                                     className={`border-2 w-full rounded xs-box-padding text-sm`}
-                                    placeholder="Enter your question"
+                                    placeholder="Enter answer"
                                 />
-                                {errors.questions?.[index]?.question && (
+                                {errors.questions?.[index]?.answer && (
                                     <span className="text-red-500 text-xs">
-                                        {errors.questions[index]?.question?.message}
+                                        {errors.questions[index]?.answer?.message}
                                     </span>
                                 )}
                             </div>
-
-                            {field.type === "checkbox" && (
-                                <div className="flex flex-col gap-2">
-                                    {field.options?.map((_, optIndex) => (
-                                        <input
-                                            key={optIndex}
-                                            type="text"
-                                            {...register(`questions.${index}.options.${optIndex}`, { required: "Option is required" })}
-                                            className={`border-2 w-full rounded xs-box-padding text-sm`}
-                                            placeholder={`Option ${optIndex + 1}`}
-                                        />
-                                    ))}
-                                </div>
-                            )}
-
-                            {field.type !== "checkbox" && (
-                                <div>
-                                    <input
-                                        {...register(`questions.${index}.answer`, { required: "Answer is required" })}
-                                        className={`border-2 w-full rounded xs-box-padding text-sm`}
-                                        placeholder="Enter answer"
-                                    />
-                                    {errors.questions?.[index]?.answer && (
-                                        <span className="text-red-500 text-xs">
-                                            {errors.questions[index]?.answer?.message}
-                                        </span>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    ))}
+                        )}
+                    </div>
+                ))}
                 </div>
 
                 <div className="flex flex-wrap gap-2">

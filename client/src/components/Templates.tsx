@@ -35,6 +35,9 @@ const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, clicked
                         >
                             <div className="template-upper-row flex items-start">
                                 <div className="template-info w-full">
+                                    <p className="text-sm text-gray-500">
+                                        Created By: {template.user.email}
+                                    </p>
                                     <p className="text-3xl font-medium">
                                         {template.title}
                                     </p>
@@ -43,7 +46,7 @@ const Templates: React.FunctionComponent<TemplatesProps> = ({ templates, clicked
                                     </p>
                                     <p className="flex gap-0.5 text-xs text-gray-400">
                                         {template.tags.map((tag) => (
-                                            <span key={tag.id}>{tag.title}</span>
+                                            <span key={tag.id}>@{tag.title}</span>
                                         ))}
                                     </p>
                                 </div>
