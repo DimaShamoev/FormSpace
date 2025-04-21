@@ -75,7 +75,8 @@ export class TagService {
 
     async update(id: number, updateTagDto: UpdateTagDto) {
         const tag = await this.tagRepository.findOne({
-            where: { id }
+            where: { id },
+            relations: ['tags']
         })
 
         if (!tag) throw new BadRequestException("Can't Find Tag To Edit")

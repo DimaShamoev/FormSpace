@@ -1,24 +1,40 @@
 import { useState, useEffect } from "react";
 import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
-import { ICreateTemplate, ITemplateFormData, ITemplateResponses } from "../Types/templates/templates.types";
+import { ICreateTemplate, ITemplateFormData } from "../Types/templates/templates.types";
 import { request } from "../api/axios.api";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
+import { FaPlus } from "react-icons/fa";
+import { ITags } from "../Types/tags/tags.types";
 
 const EditTemplate: React.FC = () => {
-    const { control, handleSubmit, register, setValue, reset } = useForm<ITemplateFormData>();
+    const { control, handleSubmit, register, reset } = useForm<ITemplateFormData>();
     const { fields, append } = useFieldArray({
         control,
         name: "questions",
     });
 
-    const [title, setTitle] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
-    const [tags, setTags] = useState<string>("");
-    const [status, setStatus] = useState<string>("");
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [tags, setTags] = useState<ITags[]>([]);
+    const [selectedTag, setSelectedTag] = useState<string>("");
+    const [status, setStatus] = useState("");
 
     const navigate = useNavigate();
     const { templateId } = useParams();
+
+    const getTags = async () => {
+        try {
+            const res = await request.get<ITags[]>("tags");
+            setTags(res.data);
+        } catch (error) {
+            toast.error("Failed to load tags");
+        }
+    };
+
+    useEffect(() => {
+        getTags();
+    }, []);
 
     useEffect(() => {
         const fetchTemplate = async () => {
@@ -28,25 +44,19 @@ const EditTemplate: React.FC = () => {
 
                 setTitle(template.title);
                 setDescription(template.description);
-                setTags(template.tags.join(", "));
+                setSelectedTag(template.tags.join(", "));
                 setStatus(template.status);
 
-                setValue("title", template.title);
-                setValue("description", template.description);
-                setValue("tags", template.tags.join(", "));
-                setValue("status", template.status);
-
-                const questionsData = template.questions.map((question: ICreateTemplate) => ({
-                    question: question.question,
-                    answer: question.answer,
-                    answers: question.answers || [],
-                    type: question.type,
+                const questionsData = template.questions.map((q: ICreateTemplate["questions"][0]) => ({
+                    question: q.question,
+                    answer: q.answer,
+                    options: q.options || [],
+                    type: q.type,
                 }));
 
                 reset({
                     title: template.title,
                     description: template.description,
-                    tags: template.tags.join(", "),
                     status: template.status,
                     questions: questionsData,
                 });
@@ -58,39 +68,32 @@ const EditTemplate: React.FC = () => {
         fetchTemplate();
     }, [templateId, reset]);
 
-    const handleAddInputs = (type: ICreateTemplate["type"]) => {
+    const handleAddInputs = (type: ICreateTemplate["questions"][0]["type"]) => {
         append({
             question: "",
             answer: "",
-            answers: type === "checkbox" ? ["", "", "", ""] : [],
+            options: type === "checkbox" ? ["", "", "", ""] : [],
             type,
         });
     };
 
     const onSubmit: SubmitHandler<ITemplateFormData> = async (data) => {
-        const filteredQuestions = data.questions.filter(q => q.question.trim() !== "");
-        const filteredAnswers = filteredQuestions.map((question) => {
-            if (question.type === "checkbox") {
-                return question.answers?.filter(a => a.trim() !== "").join(", ");
-            }
-            return question.answer?.toString().trim();
-        });
+        const filteredQuestions = data.questions.filter(q => q.question.trim());
+
+        const formattedQuestions = filteredQuestions.map(q => ({
+            question: q.question.trim(),
+            type: q.type,
+            answer: q.type === "checkbox"
+                ? q.options?.filter((a: string) => a.trim()).join(", ")
+                : q.answer?.toString().trim() || "",
+            options: q.options?.filter((a: string) => a.trim()) || [],
+        }));
 
         const requestData = {
-            ...(title.trim() && { title: title.trim() }),
-            ...(description.trim() && { description: description.trim() }),
-            ...(filteredQuestions.length && {
-                questions: filteredQuestions.map(q => q.question.trim()),
-            }),
-            ...(filteredAnswers.length && { answers: filteredAnswers }),
-            ...(status.trim() && { status: status.trim() }),
-            ...(tags.trim() && {
-                tags: tags
-                    .split(",")
-                    .map(t => t.trim())
-                    .filter(Boolean)
-                    .map(id => Number(id)),
-            }),
+            title: title.trim(),
+            description: description.trim(),
+            status: status.trim(),
+            questions: formattedQuestions,
         };
 
         try {
@@ -98,8 +101,7 @@ const EditTemplate: React.FC = () => {
             toast.success("Template updated successfully!");
             navigate("/profile");
         } catch (err: any) {
-            const error = err.response?.data.message;
-            toast.error(error.toString());
+            toast.error(err.response?.data.message?.toString() || "Update failed");
         }
     };
 
@@ -126,13 +128,27 @@ const EditTemplate: React.FC = () => {
                     onChange={(e) => setDescription(e.target.value)}
                 />
 
-                <input
-                    type="text"
-                    placeholder="Enter Tags (Optional)"
-                    className="border-2 w-full rounded xs-box-padding text-sm"
-                    value={tags}
-                    onChange={(e) => setTags(e.target.value)}
-                />
+                {/* Tags dropdown */}
+                {/* <div className="input-block">
+                    <select
+                        id="tags"
+                        value={selectedTag}
+                        onChange={(e) => setSelectedTag(e.target.value)}
+                        className="border-2 w-full rounded xs-box-padding text-sm"
+                    >
+                        <option value="">Select a tag (Optional)</option>
+                        {tags.map((tag) => (
+                            <option key={tag.id} value={tag.id}>
+                                {tag.title}
+                            </option>
+                        ))}
+                    </select>
+                    <span
+                        className="text-sm text-gray-500 cursor-pointer flex items-center gap-1"
+                    >
+                        Create Tag <FaPlus className="text-xs" />
+                    </span>
+                </div> */}
 
                 <select
                     className="border-2 w-full rounded xs-box-padding text-sm"
@@ -144,6 +160,7 @@ const EditTemplate: React.FC = () => {
                     <option value="private">PRIVATE</option>
                 </select>
 
+                {/* Render questions form */}
                 <div className="form-body flex flex-col gap-4">
                     {fields.map((field, index) => (
                         <div key={field.id} className="question-block flex flex-col gap-2">
@@ -155,19 +172,19 @@ const EditTemplate: React.FC = () => {
                                 type="text"
                                 placeholder="Enter your question"
                                 className="border-2 w-full rounded xs-box-padding text-sm"
-                                {...register(`questions.${index}.question`)}                                
+                                {...register(`questions.${index}.question`)}
                             />
 
-                            {field.type === "checkbox" && field.answers ? (
+                            {field.type === "checkbox" && field.options ? (
                                 <div className="checkbox-options grid grid-cols-1 gap-2">
-                                    {field.answers.map((_, i) => (
+                                    {field.options.map((_, i) => (
                                         <div key={i} className="flex items-center gap-3">
                                             <input type="checkbox" disabled />
                                             <input
                                                 type="text"
                                                 placeholder={`Option ${i + 1}`}
                                                 className="border-2 w-full rounded xs-box-padding text-sm"
-                                                {...register(`questions.${index}.answers.${i}`)}
+                                                {...register(`questions.${index}.options.${i}`)}
                                             />
                                         </div>
                                     ))}

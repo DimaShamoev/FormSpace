@@ -4,11 +4,13 @@ import { UpdateTemplateDto } from './dto/update-template.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Template } from './entities/template.entity';
 import { Repository } from 'typeorm';
+import { Tag } from 'src/tag/entities/tag.entity';
 
 @Injectable()
 export class TemplateService {
     constructor(
         @InjectRepository(Template) private readonly templateRepository: Repository<Template>,
+        @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>
     ) {}
 
     async allTemplates() {
@@ -93,9 +95,14 @@ export class TemplateService {
     async update(id: number, updateTemplateDto: UpdateTemplateDto) {
         const template = await this.templateRepository.findOne({
             where: { id },
+            relations: ['tags']
         });
 
         if (!template) throw new BadRequestException("Can't Find The Template To Edit");
+
+        if (updateTemplateDto.tags && updateTemplateDto.tags.length > 0) {
+            template.tags = await this.tagRepository.findByIds(updateTemplateDto.tags);
+        }
 
         return await this.templateRepository.update(id, updateTemplateDto);
     }
