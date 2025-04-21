@@ -1,5 +1,5 @@
 import { IsNumber } from "@nestjs/class-validator"
-import { IsArray, IsDate, IsOptional, IsString } from "class-validator"
+import { IsArray, IsDate, IsNotEmpty, IsOptional, IsString } from "class-validator"
 import { Tag } from "src/tag/entities/tag.entity"
 import { TemplateLike } from "src/template_likes/entities/template_like.entity"
 import { User } from "src/user/entities/user.entity"
@@ -12,13 +12,18 @@ export class CreateTemplateDto {
     @IsString()
     description: string
 
-    @IsArray()
-    @IsString({ each: true })
-    questions: string[]
-    
-    @IsArray()
-    @IsString({ each: true })
-    answers: string[]
+    @IsNotEmpty()
+    questions: {
+        question: string;
+        type: 'text' | 'textarea' | 'number' | 'checkbox';
+        options?: string[];
+    } []
+
+    @IsOptional()
+    answers: {
+        questionIndex: number;
+        answer: string | string[] | number | null;
+    } []
 
     @IsString()
     status: string

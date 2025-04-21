@@ -24,6 +24,10 @@ body {
     padding: 10px 25px;
 }
 
+.form-padding {
+    padding: 20px 25px 10px 25px;
+}
+
 .xs-box-padding {
     padding: 3px 6px;
 }
@@ -38,6 +42,10 @@ body {
 
 .sm-margin-bottom_1 {
     margin-bottom: 30px;
+}
+
+.xs-margin-bottom {
+    margin-bottom: 10px;
 }
 
 .right-padding_1 {

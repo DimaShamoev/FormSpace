@@ -16,11 +16,18 @@ export class Template {
     @Column()
     description: string
 
-    @Column('text', { array: true })
-    questions: string[]
+    @Column({ type: 'jsonb', nullable: true })
+    questions: {
+        question: string;
+        type: 'text' | 'textarea' | 'number' | 'checkbox';
+        options?: string[];
+    }[];
 
-    @Column('text', { array: true })
-    answers: string[]
+    @Column({ type: 'jsonb', nullable: true })
+    answers: {
+        questionIndex: number;
+        answer: string | string[] | number | null;
+    }[];
 
     @Column()
     status: string

@@ -1,73 +1,71 @@
-import { LoaderFunctionArgs, useLoaderData, useNavigate } from "react-router-dom";
-import { IFillFormData, ITemplate } from "../Types/templates/templates.types";
-import { request } from "../api/axios.api";
 import React from "react";
-import { toast } from "react-toastify";
-import { useForm, useFieldArray } from "react-hook-form";
+import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { ITemplate } from "../Types/templates/templates.types";
+import { request } from "../api/axios.api";
 
 export const fillTemplateLoader = async ({ params }: LoaderFunctionArgs) => {
-    const { data } = await request.get<ITemplate>(`templates/${params.id}`);
-    return data;
+  const { data } = await request.get<ITemplate>(`templates/${params.id}`);
+  return data;
 };
 
-const FillTemplate: React.FunctionComponent = () => {
+const FillTemplate: React.FC = () => {
     const template = useLoaderData() as ITemplate;
-    const navigate = useNavigate();
 
-    const { register, handleSubmit, control } = useForm<IFillFormData>({
-        defaultValues: {
-            answers: template.questions.map(() => ({ value: "" })),
-        },
-    });
-
-    const { fields } = useFieldArray({
-        control,
-        name: "answers",
-    });
-
-    const onSubmit = async (data: IFillFormData) => {
-        try {
-            const answers = data.answers.map((a) => a.value);
-            await request.post(`template-responses/${template.id}`, { answers });
-            toast.success("Template filled successfully!");
-            navigate("/profile");
-        } catch (err: any) {
-            const error = err.response?.data.message;
-            toast.error(error.toString());
-        }
-    };
+    
 
     return (
-        <div className="flex flex-col flex-1 items-center justify-center">
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="box-padding bg-white space-y-6 flex flex-col gap-2 w-[600px] max-w-full"
-            >
-                <h2 className="text-xl font-semibold text-gray-800">
-                    Fill Template: {template.title}
-                </h2>
+        <div className="flex flex-1 justify-center items-center mt-lg">
+            <div className="flex flex-col gap-3 w-full max-w-[500px] box-padding bg-white rounded">
 
-                {fields.map((field, index) => (
-                    <div className="input-block" key={field.id}>
-                        <label className="text-sm text-gray-600 mb-1 block">
-                            {template.questions[index]}
-                        </label>
-                        <input
-                            type="text"
-                            placeholder="Enter answer"
-                            className="border-2 w-full rounded xs-box-padding text-sm"
-                            {...register(`answers.${index}.value`)}
-                        />
+                <div className="template-info">
+                    <h1 className="text-3xl font-bold">{template.title}</h1>
+                    <p className="text-gray-600">{template.description}</p>
+                </div>
+
+                <form className="grid gap-4">
+                    {template.questions.map((q, idx) => (
+                        <div key={idx} className="grid gap-1">
+                        <label className="font-medium text-gray-800">{q.question}</label>
+
+                        {q.type === "text" || q.type === "number" ? (
+                            <input
+                                type={q.type}
+                                name={`question-${idx}`}
+                                className="border-2 w-full rounded xs-box-padding text-sm"
+                            />
+                        ) : q.type === "textarea" ? (
+                            <textarea
+                                name={`question-${idx}`}
+                                className="border-2 w-full rounded xs-box-padding text-sm"
+                            />
+                        ) : q.type === "checkbox" && q.options ? (
+                            <div className="grid gap-1">
+                                {q.options.map((opt, optIdx) => (
+                                    <label key={optIdx} className="flex items-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        name={`question-${idx}`}
+                                        value={opt}
+                                        className="accent-blue-600"
+                                    />
+                                    <span>{opt}</span>
+                                    </label>
+                                ))}
+                            </div>
+                        ) : null}
+                        </div>
+                    ))}
+
+                    <div className="grid place-items-center border-gray-200">
+                        <button
+                            type="submit"
+                            className="bg-blue-500 text-white rounded xs-box-padding w-full cursor-pointer"
+                        >
+                            Submit
+                        </button>
                     </div>
-                ))}
-
-                <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-all mt-4"
-                >
-                    Submit
-                </button>
-            </form>
+                </form>
+            </div>
         </div>
     );
 };

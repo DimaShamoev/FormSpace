@@ -35,8 +35,6 @@ export const TemplatePage: React.FunctionComponent = () => {
     const { id } = useParams()
     const navigate = useNavigate()
 
-    console.log(openCommentParams)
-
     const toggleLikes = async (isLike: boolean) => {
         if (!id) return
 
@@ -136,6 +134,7 @@ export const TemplatePage: React.FunctionComponent = () => {
                     <div className="bg-white box-padding template-main-info flex flex-col gap-3">
                         <div className="template-upper-row flex items-start">
                             <div className="template-info w-full">
+                                <p className="text-sm text-gray-500">Created By: {template.user.email}</p>
                                 <p className="text-3xl font-medium">{template?.title}</p>
                                 <p className="text-xl font-medium">{template?.description}</p>
                                 <p className="tags flex gap-1">
@@ -227,7 +226,7 @@ export const TemplatePage: React.FunctionComponent = () => {
                                             </div>
                                             {template.questions.map((question, index) => (
                                                 <div key={index}>
-                                                    <p className="bg-slate-400/60 sm-padding_1">{question}</p>
+                                                    <p className="bg-slate-400/60 sm-padding_1">{question.question}</p>
                                                     <p className="bg-slate-200/50 sm-padding_1">{response.answers[index]}</p>
                                                 </div>
                                             ))}

@@ -73,18 +73,22 @@ export class TemplateService {
                 title: createTemplateDto.title,
             },
         });
-
+    
         if (templateExist) throw new BadRequestException('This Template Already Exist');
-
-        const newTemplate = {
+    
+        const tags = createTemplateDto.tags ? createTemplateDto.tags.map((tagId) => ({ id: +tagId })) : [];
+        const templateLikes = createTemplateDto.template_likes ? createTemplateDto.template_likes.map((likeId) => ({ id: +likeId })) : [];
+    
+        const newTemplate = this.templateRepository.create({
             ...createTemplateDto,
             user: { id },
-            tags: [{ id: +createTemplateDto.tags }],
-            likes: [{ id: +createTemplateDto.template_likes }] 
-        };
-
+            tags,
+            templateLikes,
+        });
+    
         return await this.templateRepository.save(newTemplate);
     }
+    
 
     async update(id: number, updateTemplateDto: UpdateTemplateDto) {
         const template = await this.templateRepository.findOne({

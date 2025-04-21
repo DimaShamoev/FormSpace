@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
-import { ICreateTemplate, ITemplateFormData } from "../Types/templates/templates.types";
+import { ITemplateFormData } from "../Types/templates/templates.types";
 import { request } from "../api/axios.api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -28,11 +28,11 @@ const CreateTemplate: React.FC = () => {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-    const handleAddInputs = (type: ICreateTemplate["type"]) => {
+    const handleAddInputs = (type: "text" | "textarea" | "number" | "checkbox") => {
         append({
             question: "",
             answer: "",
-            answers: type === "checkbox" ? ["", "", "", ""] : [],
+            options: type === "checkbox" ? ["", "", "", ""] : [],
             type,
         });
     };
@@ -50,21 +50,23 @@ const CreateTemplate: React.FC = () => {
         const requestData = {
             title,
             description,
-            questions: data.questions.map(
-                (question: ICreateTemplate) => question.question
-            ),
-            answers: data.questions.map((question: ICreateTemplate) => {
-                if (question.type === "checkbox") {
-                    return question.answers?.toLocaleString();
-                }
-                return question.answer?.toString();
-            }),
+            questions: data.questions.map((question) => ({
+                question: question.question,
+                type: question.type,
+                options: question.type === "checkbox" ? question.options?.filter(opt => opt !== "") : undefined,
+            })),
+            answers: data.questions.map((question, index) => ({
+                questionIndex: index,
+                answer: question.type === "checkbox" 
+                    ? question.options?.filter(opt => opt !== "")
+                    : question.answer,
+            })),
             status,
-            tags: selectedTag ? [+selectedTag] : [],
+            tags: selectedTag ? [{ id: +selectedTag }] : [],
         };
-
+    
         console.log(requestData);
-
+    
         try {
             await request.post("/templates", requestData);
             toast.success("Template Created Successfully");
@@ -74,6 +76,7 @@ const CreateTemplate: React.FC = () => {
             toast.error(error.toString());
         }
     };
+    
 
     const handleModalOpen = () => {
         setIsModalOpen(prev => !prev);
@@ -97,7 +100,7 @@ const CreateTemplate: React.FC = () => {
                         <input
                             type="text"
                             placeholder="Enter Title"
-                            className={`border-2 w-full rounded xs-box-padding text-sm ${errors.title ? "border-red-500" : ""}`}
+                            className={`border-2 w-full rounded xs-box-padding text-sm`}
                             value={title}
                             {...register("title", { required: "Title is required" })}
                             onChange={(e) => setTitle(e.target.value)}
@@ -112,7 +115,7 @@ const CreateTemplate: React.FC = () => {
                     <div className="input-block">
                         <input
                             placeholder="Enter Description"
-                            className={`border-2 w-full rounded xs-box-padding text-sm ${errors.description ? "border-red-500" : ""}`}
+                            className={`border-2 w-full rounded xs-box-padding text-sm`}
                             value={description}
                             {...register("description", { required: "Description is required" })}
                             onChange={(e) => setDescription(e.target.value)}
@@ -126,7 +129,7 @@ const CreateTemplate: React.FC = () => {
 
                     <div className="input-block">
                         <select
-                            className={`border-2 w-full rounded xs-box-padding text-sm ${errors.status ? "border-red-500" : ""}`}
+                            className={`border-2 w-full rounded xs-box-padding text-sm`}
                             value={status}
                             {...register("status", { required: "Status is required" })}
                             onChange={(e) => setStatus(e.target.value)}
@@ -153,7 +156,7 @@ const CreateTemplate: React.FC = () => {
                             id="tags"
                             value={selectedTag}
                             onChange={(e) => setSelectedTag(e.target.value)}
-                            className={`border-2 w-full rounded xs-box-padding text-sm ${errors.tags ? "border-red-500" : ""}`}
+                            className={`border-2 w-full rounded xs-box-padding text-sm`}
                         >
                             <option value="">Select a tag (Optional)</option>
                             {tags.map((tag) => (
@@ -174,47 +177,46 @@ const CreateTemplate: React.FC = () => {
                             <label className="block font-medium mb-1">
                                 Question #{index + 1}
                             </label>
-                            <input
-                                type="text"
-                                placeholder="Enter your question"
-                                className="border-2 w-full rounded xs-box-padding text-sm"
-                                {...register(`questions.${index}.question`)}
-                            />
-                            {field.type === "checkbox" && field.answers ? (
-                                <div className="checkbox-options grid grid-cols-1 gap-2">
-                                    {field.answers.map((_, i) => (
-                                        <div key={i} className="flex items-center gap-3">
-                                            <input type="checkbox" disabled />
-                                            <input
-                                                type="text"
-                                                placeholder={`Option ${i + 1}`}
-                                                className="border-2 w-full rounded xs-box-padding text-sm"
-                                                {...register(`questions.${index}.answers.${i}`)}
-                                            />
-                                        </div>
+                            <div>
+                                <input
+                                    {...register(`questions.${index}.question`, { required: "Question is required" })}
+                                    className={`border-2 w-full rounded xs-box-padding text-sm`}
+                                    placeholder="Enter your question"
+                                />
+                                {errors.questions?.[index]?.question && (
+                                    <span className="text-red-500 text-xs">
+                                        {errors.questions[index]?.question?.message}
+                                    </span>
+                                )}
+                            </div>
+
+                            {field.type === "checkbox" && (
+                                <div className="flex flex-col gap-2">
+                                    {field.options?.map((_, optIndex) => (
+                                        <input
+                                            key={optIndex}
+                                            type="text"
+                                            {...register(`questions.${index}.options.${optIndex}`, { required: "Option is required" })}
+                                            className={`border-2 w-full rounded xs-box-padding text-sm`}
+                                            placeholder={`Option ${optIndex + 1}`}
+                                        />
                                     ))}
                                 </div>
-                            ) : field.type === "number" ? (
-                                <input
-                                    type="number"
-                                    min="0"
-                                    placeholder="Enter your answer (non-negative)"
-                                    className="border-2 w-full rounded xs-box-padding text-sm"
-                                    {...register(`questions.${index}.answer`)}
-                                />
-                            ) : field.type === "textarea" ? (
-                                <textarea
-                                    placeholder="Enter your answer"
-                                    className="border-2 w-full rounded xs-box-padding text-sm"
-                                    {...register(`questions.${index}.answer`)}
-                                />
-                            ) : (
-                                <input
-                                    type="text"
-                                    placeholder="Enter your answer"
-                                    className="border-2 w-full rounded xs-box-padding text-sm"
-                                    {...register(`questions.${index}.answer`)}
-                                />
+                            )}
+
+                            {field.type !== "checkbox" && (
+                                <div>
+                                    <input
+                                        {...register(`questions.${index}.answer`, { required: "Answer is required" })}
+                                        className={`border-2 w-full rounded xs-box-padding text-sm`}
+                                        placeholder="Enter answer"
+                                    />
+                                    {errors.questions?.[index]?.answer && (
+                                        <span className="text-red-500 text-xs">
+                                            {errors.questions[index]?.answer?.message}
+                                        </span>
+                                    )}
+                                </div>
                             )}
                         </div>
                     ))}
@@ -224,7 +226,7 @@ const CreateTemplate: React.FC = () => {
                     <button
                         type="button"
                         onClick={() => handleAddInputs("text")}
-                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer"
+                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer grow"
                     >
                         + Add Text Question
                     </button>
@@ -232,7 +234,7 @@ const CreateTemplate: React.FC = () => {
                     <button
                         type="button"
                         onClick={() => handleAddInputs("textarea")}
-                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer"
+                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer grow"
                     >
                         + Add Multi-line Question
                     </button>
@@ -240,7 +242,7 @@ const CreateTemplate: React.FC = () => {
                     <button
                         type="button"
                         onClick={() => handleAddInputs("number")}
-                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer"
+                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer grow"
                     >
                         + Add Number Question
                     </button>
@@ -248,7 +250,7 @@ const CreateTemplate: React.FC = () => {
                     <button
                         type="button"
                         onClick={() => handleAddInputs("checkbox")}
-                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer"
+                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer grow"
                     >
                         + Add Checkbox Question
                     </button>
