@@ -1,5 +1,5 @@
 import { IFormData } from "../../Types/forms/form.types";
-import { IResponseUserData, IUser, IUserDataRegistration } from "../../Types/user/user.types";
+import { IResponseUserData, IUser, IUserDataRegistration, IUserInfo } from "../../Types/user/user.types";
 import { request } from "../../api/axios.api";
 
 export const AuthService = {
@@ -12,7 +12,7 @@ export const AuthService = {
         }
     },
 
-    login: async (data: IFormData) => {
+    async login(data: IFormData): Promise<IUserInfo> {
         const res = await request.post('auth/login', data)
         return res.data
     },

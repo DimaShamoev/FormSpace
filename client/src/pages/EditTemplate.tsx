@@ -4,10 +4,8 @@ import { ICreateTemplate, ITemplateFormData } from "../Types/templates/templates
 import { request } from "../api/axios.api";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
-import { FaPlus } from "react-icons/fa";
-import { ITags } from "../Types/tags/tags.types";
 
-const EditTemplate: React.FC = () => {
+const EditTemplate: React.FunctionComponent = () => {
     const { control, handleSubmit, register, reset } = useForm<ITemplateFormData>();
     const { fields, append } = useFieldArray({
         control,
@@ -16,25 +14,11 @@ const EditTemplate: React.FC = () => {
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [tags, setTags] = useState<ITags[]>([]);
-    const [selectedTag, setSelectedTag] = useState<string>("");
     const [status, setStatus] = useState("");
 
     const navigate = useNavigate();
     const { templateId } = useParams();
 
-    const getTags = async () => {
-        try {
-            const res = await request.get<ITags[]>("tags");
-            setTags(res.data);
-        } catch (error) {
-            toast.error("Failed to load tags");
-        }
-    };
-
-    useEffect(() => {
-        getTags();
-    }, []);
 
     useEffect(() => {
         const fetchTemplate = async () => {
@@ -44,7 +28,6 @@ const EditTemplate: React.FC = () => {
 
                 setTitle(template.title);
                 setDescription(template.description);
-                setSelectedTag(template.tags.join(", "));
                 setStatus(template.status);
 
                 const questionsData = template.questions.map((q: ICreateTemplate["questions"][0]) => ({
@@ -127,28 +110,6 @@ const EditTemplate: React.FC = () => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                 />
-
-                {/* Tags dropdown */}
-                {/* <div className="input-block">
-                    <select
-                        id="tags"
-                        value={selectedTag}
-                        onChange={(e) => setSelectedTag(e.target.value)}
-                        className="border-2 w-full rounded xs-box-padding text-sm"
-                    >
-                        <option value="">Select a tag (Optional)</option>
-                        {tags.map((tag) => (
-                            <option key={tag.id} value={tag.id}>
-                                {tag.title}
-                            </option>
-                        ))}
-                    </select>
-                    <span
-                        className="text-sm text-gray-500 cursor-pointer flex items-center gap-1"
-                    >
-                        Create Tag <FaPlus className="text-xs" />
-                    </span>
-                </div> */}
 
                 <select
                     className="border-2 w-full rounded xs-box-padding text-sm"

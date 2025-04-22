@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form"
 import { IFormData } from "../Types/forms/form.types"
 
 
-const SingIn = () => {
+const SingIn: React.FunctionComponent = () => {
     const [Error, setError] = useState<string | null>(null)
 
     const dispatch = useAppDispatch()

@@ -8,13 +8,8 @@ import { ITags } from "../Types/tags/tags.types";
 import CreateTagModal from "../components/modals/CreateTagModal";
 import { FaPlus } from "react-icons/fa6";
 
-const CreateTemplate: React.FC = () => {
-    const {
-        control,
-        handleSubmit,
-        register,
-        formState: { errors },
-    } = useForm<ITemplateFormData>();
+const CreateTemplate: React.FunctionComponent = () => {
+    const { control, handleSubmit, register, formState: { errors } } = useForm<ITemplateFormData>();
     const { fields, append } = useFieldArray({
         control,
         name: "questions",
@@ -85,7 +80,7 @@ const CreateTemplate: React.FC = () => {
     }, []);
 
     return (
-        <div className="flex flex-1 items-center justify-center mt-lg">
+        <div className="flex flex-1 items-center justify-center">
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="box-padding bg-white flex flex-col gap-2 w-[600px] max-w-full"
@@ -177,7 +172,6 @@ const CreateTemplate: React.FC = () => {
                         </div>
 
                         <div>
-                            {/* Question input is required */}
                             <input
                                 {...register(`questions.${index}.question`, { required: "Question is required" })}
                                 className={`border-2 w-full rounded xs-box-padding text-sm`}
@@ -192,7 +186,6 @@ const CreateTemplate: React.FC = () => {
 
                         {field.type === "checkbox" && (
                             <div className="flex flex-col gap-2">
-                                {/* Options for checkbox are required */}
                                 {field.options?.map((_, optIndex) => (
                                     <input
                                         key={optIndex}
@@ -207,9 +200,8 @@ const CreateTemplate: React.FC = () => {
 
                         {field.type !== "checkbox" && (
                             <div>
-                                {/* Answer is now optional */}
                                 <input
-                                    {...register(`questions.${index}.answer`)} // No 'required' validation here
+                                    {...register(`questions.${index}.answer`)}
                                     className={`border-2 w-full rounded xs-box-padding text-sm`}
                                     placeholder="Enter answer"
                                 />

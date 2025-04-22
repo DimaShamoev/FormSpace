@@ -11,7 +11,7 @@ export const CommentsLoaderAdmin = async () => {
     return data
 }
 
-const CommentsTable = () => {
+const CommentsTable: React.FunctionComponent = () => {
 
     const comments = useLoaderData() as IComments[]
     const [selectedTemplates, setSelectedTemplates] = useState<number[]>([])

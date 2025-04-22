@@ -12,7 +12,7 @@ export const templatesLoader = async () => {
     return data;
 };
 
-const Home = () => {
+const Home: React.FunctionComponent = () => {
     const [templates, setTemplates] = useState<ITemplate[]>(useLoaderData() as ITemplate[]);
     const [clickedParam, setClickedParam] = useState<number | null>(null);
     const [searchQuery, setSearchQuery] = useState<string>("");

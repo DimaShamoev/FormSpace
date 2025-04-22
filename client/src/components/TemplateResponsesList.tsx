@@ -20,7 +20,7 @@ const TemplateResponsesList: React.FunctionComponent<ITemplateResponsesListProps
     }
 
     return (
-        <div>
+        <React.Fragment>
             {isAuth && isAuthor(template.user.id) || isAuth && isAdmin ? (
                         <div className={`flex flex-col gap-4 bg-white box-padding h-[48px] overflow-hidden transition-all ${responseOpen ? 'h-full' : ''}`}>
                             <p className="flex items-center justify-between">
@@ -51,7 +51,7 @@ const TemplateResponsesList: React.FunctionComponent<ITemplateResponsesListProps
                             )}
                         </div>
                     ) : null}
-        </div>
+        </React.Fragment>
     )
 }
 

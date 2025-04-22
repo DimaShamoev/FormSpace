@@ -17,7 +17,7 @@ export const userLoader = async () => {
     return data
 }
 
-const Profile = () => {
+const Profile: React.FunctionComponent = () => {
 
     const userData = useLoaderData() as IDataUser
     const [templates, setTemplates] = useState<ITemplate[]>([])
@@ -58,15 +58,19 @@ const Profile = () => {
             <div className="templates box-padding bg-white">
                 <UserTemplatesTable templates={templates} />
             </div>
+
             <div className="responses box-padding bg-white">
                 <UserResponsesTable responses={responses} />
             </div>
+            
             <div className="comments box-padding bg-white">
                 <UserCommentsTable comments={comments} />
             </div>
+            
             <div className="likes box-padding bg-white">
                 <UserLikesTable likes={likes} />
             </div>
+            
             <div className="tags box-padding bg-white">
                 <UserTagsTable tags={tags} />
             </div>

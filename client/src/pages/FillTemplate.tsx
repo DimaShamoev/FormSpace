@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  LoaderFunctionArgs,
-  useLoaderData,
-  useNavigate,
-} from "react-router-dom";
+import { LoaderFunctionArgs, useLoaderData, useNavigate } from "react-router-dom";
 import { ITemplate } from "../Types/templates/templates.types";
 import { request } from "../api/axios.api";
 import { toast } from "react-toastify";
@@ -14,7 +10,7 @@ export const fillTemplateLoader = async ({ params }: LoaderFunctionArgs) => {
   return data;
 };
 
-const FillTemplate: React.FC = () => {
+const FillTemplate: React.FunctionComponent = () => {
     const template = useLoaderData() as ITemplate;
     const navigate = useNavigate();
     const { register, handleSubmit } = useForm();
@@ -57,7 +53,7 @@ const FillTemplate: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-1 justify-center items-center mt-lg">
+        <div className="flex flex-1 justify-center items-center">
             <div className="flex flex-col gap-3 w-full max-w-[500px] box-padding bg-white rounded">
                 <div className="template-info">
                     <h1 className="text-3xl font-bold">{template.title}</h1>

@@ -13,7 +13,7 @@ import EditCommentModal from "../components/modals/EditCommentModal"
 import TemplateInfo from "../components/TemplateInfo"
 import TemplateResponsesList from "../components/TemplateResponsesList"
 import TemplateComments from "../components/TemplateComments"
-import UserTemplateResponse from "../components/userTemplateResponse"
+import UserTemplateResponse from "../components/UserTemplateResponse"
 
 export const templatePageLoader = async ({ params }: LoaderFunctionArgs) => {
     const { data } = await request.get<ITemplate>(`templates/${params.id}`)
