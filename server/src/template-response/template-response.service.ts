@@ -14,6 +14,15 @@ export class TemplateResponseService {
         @InjectRepository(Template) private readonly templateRepository: Repository<Template>
     ) {}    
 
+    async allResponses() {
+        return this.templateResponseRepository.find({
+            relations: {
+                template: true,
+                user: true
+            }
+        })
+    }
+
     async findAll(id: number) {
         return this.templateResponseRepository.find({
             where: {

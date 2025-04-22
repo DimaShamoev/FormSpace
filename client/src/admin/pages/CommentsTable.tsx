@@ -109,7 +109,7 @@ const CommentsTable = () => {
                                     {new Date(comment.createdAt).toLocaleString('en-GB')}
                                 </td>
                                 <td>
-                                    {comment?.template?.title ? (<Link to={`../../template/${comment.template.id}`}>GO TO</Link>): "No Link"}
+                                    {comment?.template?.title ? (<Link to={`../../template/${comment.template.id}`} className="text-center text-blue-400 underline" >GO TO</Link>): "No Link"}
                                 </td>
                             </tr>
                         ))}

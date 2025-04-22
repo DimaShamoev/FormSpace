@@ -10,6 +10,11 @@ export class TemplateResponseController {
         private readonly templateResponseService: TemplateResponseService,
     ) {}
 
+    @Get('all-responses')
+    allResponses() {
+        return this.templateResponseService.allResponses()
+    }
+
     @Get()
     @UseGuards(JwtAuthGuard)
     findAll(@Req() req) {

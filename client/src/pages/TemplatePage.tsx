@@ -13,6 +13,7 @@ import EditCommentModal from "../components/modals/EditCommentModal"
 import TemplateInfo from "../components/TemplateInfo"
 import TemplateResponsesList from "../components/TemplateResponsesList"
 import TemplateComments from "../components/TemplateComments"
+import UserTemplateResponse from "../components/userTemplateResponse"
 
 export const templatePageLoader = async ({ params }: LoaderFunctionArgs) => {
     const { data } = await request.get<ITemplate>(`templates/${params.id}`)
@@ -104,6 +105,11 @@ export const TemplatePage: React.FunctionComponent = () => {
                         id={id}
                     />
 
+                    <UserTemplateResponse
+                        template={template}
+                        user={user}
+                    />
+
                     <EditCommentModal
                         isEdit={isCommentEdit}
                         toggleIsEdit={toggleEditCommentModal}
@@ -111,7 +117,9 @@ export const TemplatePage: React.FunctionComponent = () => {
                         setCommentParams={setCommentParams}
                     />
 
-                    {template.template_responses.map((response) => response.user.id === user?.id ? (response.answers.map((answer) => <p>{answer}</p>)) : 'you`re not owner')}
+                    
+
+                    {/* {template.template_responses.map((response) => response.user.id === user?.id ? (response.answers.map((answer) => <p>{answer}</p>)) : 'you`re not owner')} */}
 
                 </div>
             )}

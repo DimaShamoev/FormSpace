@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { LoaderFunctionArgs, useLoaderData, useNavigate } from "react-router-dom";
 import { ITemplate, ITemplateResponses } from "../Types/templates/templates.types";
 import { useForm } from "react-hook-form";
 import { request } from "../api/axios.api";
 import { toast } from "react-toastify";
+import { useUser } from "../hooks/useUser";
+import { useRole } from "../hooks/useRole";
+import { useAuth } from "../hooks/useAuth";
 
 export const editTemplateResponseLoader = async ({ params }: LoaderFunctionArgs) => {
     const templateId = params.templateId;
@@ -26,6 +29,11 @@ const EditTemplateResponse: React.FunctionComponent = () => {
     };
 
     const { register, handleSubmit, setValue } = useForm();
+
+    const { user } = useUser()
+    const { isAdmin } = useRole()
+    const isAuth = useAuth()
+    const navigate = useNavigate()
 
     useEffect(() => {
         response.answers.forEach((answer, idx) => {
@@ -59,8 +67,8 @@ const EditTemplateResponse: React.FunctionComponent = () => {
                 templateId: template.id,
                 answers,
             });
-
             toast.success("Response updated successfully!");
+            navigate(`/template/${template.id}`)
         } catch (err: any) {
             const error = err.response?.data.message;
             toast.error(error.toString());
@@ -68,75 +76,84 @@ const EditTemplateResponse: React.FunctionComponent = () => {
     };
 
     return (
-        <div className="flex flex-1 justify-center items-center mt-lg">
-            <div className="flex flex-col gap-3 w-full max-w-[500px] box-padding bg-white rounded">
-                <div className="template-info">
-                    <h1 className="text-3xl font-bold">{template.title}</h1>
-                    <p className="text-gray-600">{template.description}</p>
-                </div>
 
-                <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
-                    {template.questions.map((question, index) => {
-                        const name = `question-${index}`;
-
-                        return (
-                            <div key={index} className="grid gap-1">
-                                <div className="font-medium">
-                                    {question.question}
-                                </div>
-
-                                {(question.type === "text" ||
-                                    question.type === "number") && (
-                                    <input
-                                        type={question.type}
-                                        {...register(name)}
-                                        className="border-2 w-full rounded xs-box-padding text-sm"
-                                    />
-                                )}
-
-                                {question.type === "textarea" && (
-                                    <textarea
-                                        {...register(name)}
-                                        className="border-2 w-full rounded xs-box-padding text-sm"
-                                    />
-                                )}
-
-                                {question.type === "checkbox" &&
-                                    question.options && (
-                                        <div className="grid gap-1">
-                                            {question.options.map(
-                                                (opt, optIdx) => (
-                                                    <label
-                                                        key={optIdx}
-                                                        className="flex items-center gap-2"
-                                                    >
-                                                        <input
-                                                            type="checkbox"
-                                                            value={opt}
-                                                            {...register(name)}
-                                                            className="accent-blue-600"
-                                                        />
-                                                        <span>{opt}</span>
-                                                    </label>
-                                                )
-                                            )}
-                                        </div>
-                                    )}
-                            </div>
-                        );
-                    })}
-
-                    <div className="grid place-items-center border-gray-200">
-                        <button
-                            type="submit"
-                            className="bg-blue-500 text-white rounded xs-box-padding w-full cursor-pointer"
-                        >
-                            Submit
-                        </button>
+        <div>
+            {template.template_responses.map((response) => response.user.id == user?.id && isAuth || isAuth && isAdmin ? (
+                <div className="flex flex-1 justify-center items-center mt-lg">
+                <div className="flex flex-col gap-3 w-full max-w-[500px] box-padding bg-white rounded">
+                    <div className="template-info">
+                        <h1 className="text-3xl font-bold">{template.title}</h1>
+                        <p className="text-gray-600">{template.description}</p>
                     </div>
-                </form>
+    
+                    <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
+                        {template.questions.map((question, index) => {
+                            const name = `question-${index}`;
+    
+                            return (
+                                <div key={index} className="grid gap-1">
+                                    <div className="font-medium">
+                                        {question.question}
+                                    </div>
+    
+                                    {(question.type === "text" ||
+                                        question.type === "number") && (
+                                        <input
+                                            type={question.type}
+                                            {...register(name)}
+                                            className="border-2 w-full rounded xs-box-padding text-sm"
+                                        />
+                                    )}
+    
+                                    {question.type === "textarea" && (
+                                        <textarea
+                                            {...register(name)}
+                                            className="border-2 w-full rounded xs-box-padding text-sm"
+                                        />
+                                    )}
+    
+                                    {question.type === "checkbox" &&
+                                        question.options && (
+                                            <div className="grid gap-1">
+                                                {question.options.map(
+                                                    (opt, optIdx) => (
+                                                        <label
+                                                            key={optIdx}
+                                                            className="flex items-center gap-2"
+                                                        >
+                                                            <input
+                                                                type="checkbox"
+                                                                value={opt}
+                                                                {...register(name)}
+                                                                className="accent-blue-600"
+                                                            />
+                                                            <span>{opt}</span>
+                                                        </label>
+                                                    )
+                                                )}
+                                            </div>
+                                        )}
+                                </div>
+                            );
+                        })}
+    
+                        <div className="grid place-items-center border-gray-200">
+                            <button
+                                type="submit"
+                                className="bg-blue-500 text-white rounded xs-box-padding w-full cursor-pointer"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
+            ) : (
+                'You Didn`t fill this form'
+            ))}
         </div>
+
+        
     );
 };
 

@@ -18,6 +18,7 @@ import TemplatesTable, { templatesLoaderAdmin } from "../admin/pages/TemplatesTa
 import UsersTable, { usersLoaderAdmin } from "../admin/pages/UsersTable";
 import CommentsTable, { CommentsLoaderAdmin } from "../admin/pages/CommentsTable";
 import EditTemplateResponse, { editTemplateResponseLoader } from "../pages/EditTemplateResponse";
+import ResponsesTable, { responsesLoaderAdmin } from "../admin/pages/ResponsesTable";
 
 export const routes = createBrowserRouter([
     {
@@ -88,6 +89,11 @@ export const routes = createBrowserRouter([
                         path: "templates-list",
                         element: <TemplatesTable />,
                         loader: templatesLoaderAdmin
+                    },
+                    {
+                        path: "responses-list",
+                        element: <ResponsesTable />,
+                        loader: responsesLoaderAdmin
                     },
                     {
                         path: "comments-list",
