@@ -4,7 +4,6 @@ import { toast } from 'react-toastify'
 import { request } from '../api/axios.api'
 import { IComments } from '../Types/comments/comments.types'
 import { HiDotsHorizontal } from 'react-icons/hi'
-import { useAuth } from '../hooks/useAuth'
 
 interface ITemplateCommentsProps {
     template: ITemplate,

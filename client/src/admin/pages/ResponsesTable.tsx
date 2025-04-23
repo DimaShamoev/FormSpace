@@ -82,7 +82,7 @@ const ResponsesTable: React.FunctionComponent = () => {
                         </th>
                         <th>User</th>
                         <th>Template ID</th>
-                        <th>Answers</th>
+                        <th>Filled</th>
                         <th>Link</th>
                         </tr>
                     </thead>

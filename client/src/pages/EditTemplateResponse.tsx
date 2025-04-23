@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import { useUser } from "../hooks/useUser";
 import { useRole } from "../hooks/useRole";
 import { useAuth } from "../hooks/useAuth";
-import ErrorPage from "../components/errors/ErrorPage";
 import NotFound from "../components/errors/NotFound";
 
 export const editTemplateResponseLoader = async ({ params }: LoaderFunctionArgs) => {

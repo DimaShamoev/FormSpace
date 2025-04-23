@@ -4,7 +4,7 @@ import { ITemplate } from "../Types/templates/templates.types";
 import { request } from "../api/axios.api";
 import { toast } from "react-toastify";
 import { useLoaderData } from "react-router-dom";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import useDebounce from "../hooks/useDebounce";
 
 export const templatesLoader = async () => {
