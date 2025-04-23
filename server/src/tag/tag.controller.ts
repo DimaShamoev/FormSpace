@@ -2,8 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards, UseP
 import { TagService } from './tag.service';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Tag } from './entities/tag.entity';
+import { JwtAuthGuard } from 'src/auth/Guards/jwt-auth.guard';
 
 @Controller('tags')
 export class TagController {
