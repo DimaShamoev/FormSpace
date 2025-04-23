@@ -12,7 +12,7 @@ export const AuthService = {
         }
     },
 
-    async login(data: IFormData): Promise<IUserInfo> {
+    login: async (data: IFormData) => {
         const res = await request.post('auth/login', data)
         return res.data
     },

@@ -53,6 +53,7 @@ export interface IUserInfo {
     last_name: string;
     email: string
     role: string
+    token: string
 }
 
 export interface ICurrentUser {

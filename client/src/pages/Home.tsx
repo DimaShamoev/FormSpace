@@ -4,7 +4,7 @@ import { ITemplate } from "../Types/templates/templates.types";
 import { request } from "../api/axios.api";
 import { toast } from "react-toastify";
 import { useLoaderData } from "react-router-dom";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import useDebounce from "../hooks/useDebounce";
 
 export const templatesLoader = async () => {
@@ -18,6 +18,8 @@ const Home: React.FunctionComponent = () => {
     const [searchQuery, setSearchQuery] = useState<string>("");
 
     const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
+    
 
     const sortByLikes = () => {
         const sorted = [...templates].sort((a, b) => b.templateLikes.length - a.templateLikes.length);

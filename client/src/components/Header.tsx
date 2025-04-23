@@ -6,7 +6,8 @@ import { useAside } from "../hooks/useAside"
 import { useAppDispatch } from "../store/hook"
 import { removeToken } from "../helpers/localstorage/localstorage.helper"
 import { logOut } from "../store/user/userSlice"
-const Header = () => {
+
+const Header: React.FunctionComponent = () => {
 
     const { isAdmin } = useRole()
     const isAuth = useAuth()
