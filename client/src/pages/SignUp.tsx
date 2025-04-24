@@ -77,7 +77,7 @@ const SignUp: React.FunctionComponent = () => {
 
                 <div className="input-block">
                     <input
-                        type="text"
+                        type="password"
                         placeholder="Enter Password"
                         className="form-input rounded-md"
                         {...register('password', {
@@ -89,7 +89,7 @@ const SignUp: React.FunctionComponent = () => {
 
                 <div className="input-block">
                     <input
-                        type="text"
+                        type="password"
                         placeholder="Re-Enter Password"
                         className="form-input rounded-md"
                         {...register('confirmPassword', {
@@ -138,5 +138,3 @@ const SignUp: React.FunctionComponent = () => {
 }
 
 export default SignUp
-
-// Add react hook form

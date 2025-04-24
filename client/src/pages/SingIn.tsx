@@ -71,7 +71,7 @@ const SingIn: React.FunctionComponent = () => {
                 
                 <div className="input-block">
                     <input
-                        type="text"
+                        type="password"
                         placeholder="Enter Password"
                         className="form-input rounded-md"
                         {...register("password", {
