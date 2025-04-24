@@ -27,7 +27,6 @@ const SingIn: React.FunctionComponent = () => {
                 setToken('token', response.token)
                 dispatch(login(response))
                 navigate('/')
-                window.location.reload()
             }
         } catch (err: any) {
             const error = 'Email Or Password Are Wrong'
