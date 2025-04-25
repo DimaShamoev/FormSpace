@@ -5,7 +5,7 @@ const AdminHeader: React.FunctionComponent = () => {
     return (
         <div className='bg-white box-padding'>
             <nav className='admin-nav'>
-                <ul>
+                <ul className='flex flex-wrap'>
                     <li>
                         <NavLink className={({isActive}) => `nav-link ${isActive ? 'nav-link-active' : ''}`} to='admins-list'>Admins</NavLink>
                     </li>

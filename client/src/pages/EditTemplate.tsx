@@ -121,7 +121,6 @@ const EditTemplate: React.FunctionComponent = () => {
                     <option value="private">PRIVATE</option>
                 </select>
 
-                {/* Render questions form */}
                 <div className="form-body flex flex-col gap-4">
                     {fields.map((field, index) => (
                         <div key={field.id} className="question-block flex flex-col gap-2">
@@ -180,28 +179,28 @@ const EditTemplate: React.FunctionComponent = () => {
                     <button
                         type="button"
                         onClick={() => handleAddInputs("text")}
-                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer"
+                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer flex-grow"
                     >
                         + Add Text Question
                     </button>
                     <button
                         type="button"
                         onClick={() => handleAddInputs("textarea")}
-                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer"
+                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer flex-grow"
                     >
                         + Add Multi-line Question
                     </button>
                     <button
                         type="button"
                         onClick={() => handleAddInputs("number")}
-                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer"
+                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer flex-grow"
                     >
                         + Add Number Question
                     </button>
                     <button
                         type="button"
                         onClick={() => handleAddInputs("checkbox")}
-                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer"
+                        className="bg-blue-500 text-white rounded xs-box-padding text-xs cursor-pointer flex-grow"
                     >
                         + Add Checkbox Question
                     </button>
@@ -209,7 +208,7 @@ const EditTemplate: React.FunctionComponent = () => {
 
                 <button
                     type="submit"
-                    className="bg-green-600 text-white xs-box-padding w-full text-sm rounded-xs cursor-pointer"
+                    className="bg-green-600 text-white xs-box-padding w-full text-sm rounded-xs cursor-pointer flex-grow"
                 >
                     Update Form
                 </button>

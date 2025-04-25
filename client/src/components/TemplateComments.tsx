@@ -59,7 +59,7 @@ const TemplateComments: React.FunctionComponent<ITemplateCommentsProps> = ({ tem
                                 <div className="title">
                                     Leave Your Comment
                                 </div>
-                                <div className="input-block grid grid-cols-[90%10%] gap-2">
+                                <div className="comment-input-block grid grid-cols-[80%20%] gap-2">
                                     <input
                                         placeholder="Enter Your Comment"
                                         className="border-2 rounded-sm xs-box-padding text-sm"
@@ -67,7 +67,7 @@ const TemplateComments: React.FunctionComponent<ITemplateCommentsProps> = ({ tem
                                     />
                                     <button
                                         type="submit"
-                                        className="text-sm bg-blue-700 xs-box-padding text-white rounded-sm cursor-pointer"
+                                        className="text-xs bg-blue-700 xs-box-padding text-white rounded-sm cursor-pointer"
                                         onClick={handleComment}
                                     >
                                         Leave Comment

@@ -9,7 +9,7 @@ interface TemplatesToolBarProps {
 
 const TemplatesToolBar: React.FunctionComponent<TemplatesToolBarProps> = ({ sortByLikes, sortByResponses, setSearchQuery }) => {
     return (
-        <div className="bg-white flex justify-between items-center box-padding">
+        <div className="template-toolbar bg-white flex justify-between items-center box-padding">
             <div className="buttons">
                 <ul className="flex items-center gap-5">
                     <Link to="create-template" className="text-sm bg-blue-700 sm-padding_1 text-white rounded-md">
@@ -23,7 +23,7 @@ const TemplatesToolBar: React.FunctionComponent<TemplatesToolBarProps> = ({ sort
                     </li>
                 </ul>
             </div>
-            <div className="relative search flex flex-row-reverse">
+            <div className="relative template-search flex flex-row-reverse">
                 <input
                     type="text"
                     placeholder="search"

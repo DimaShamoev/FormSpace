@@ -81,7 +81,6 @@ const ResponsesTable: React.FunctionComponent = () => {
                             />
                         </th>
                         <th>User</th>
-                        <th>Template ID</th>
                         <th>Filled</th>
                         <th>Link</th>
                         </tr>
@@ -98,8 +97,6 @@ const ResponsesTable: React.FunctionComponent = () => {
                             </td>
 
                             <td>{response.user.email}</td>
-
-                            <td className="text-center">{response.template.id}</td>
 
                             <td>{new Date(response.createdAt).toLocaleString('en-GB')}</td>
 
