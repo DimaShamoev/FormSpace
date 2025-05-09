@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { request } from "../api/axios.api"
 import { ITemplate, ITemplateResponses } from "../Types/templates/templates.types"
 import { IDataUser } from "../Types/user/user.types"
-import { useLoaderData } from "react-router-dom"
+import { Link, useLoaderData } from "react-router-dom"
 import { ILikes } from "../Types/likes/likes.types"
 import UserTemplatesTable from "../components/UserTemplatesTable"
 import UserLikesTable from "../components/UserLikesTable"
@@ -52,6 +52,7 @@ const Profile: React.FunctionComponent = () => {
                     <p><b>Email: </b>{userData.email}</p>
                     <p><b>First Name: </b>{userData.first_name}</p>
                     <p><b>Last Name: </b>{userData.last_name}</p>
+                    <p><b><Link to='/salesforce'>Subscribe Salesforce</Link> </b></p>
                 </div>
             </div>
             

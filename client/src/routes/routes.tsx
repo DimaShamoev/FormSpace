@@ -33,6 +33,7 @@ import { usersLoaderAdmin } from "../admin/pages/UsersTable";
 import { templatesLoaderAdmin } from "../admin/pages/TemplatesTable";
 import { responsesLoaderAdmin } from "../admin/pages/ResponsesTable";
 import { CommentsLoaderAdmin } from "../admin/pages/CommentsTable";
+import SalesforceForm from "../pages/SalesforceForm";
 
 export const routes = createBrowserRouter([
   {
@@ -48,6 +49,16 @@ export const routes = createBrowserRouter([
           </WithSuspense>
         ),
         loader: templatesLoader,
+      },
+      {
+        path:'salesforce',
+        element: (
+            <WithSuspense>
+                <ProtectedRoute>
+                    <SalesforceForm />
+                </ProtectedRoute>
+            </WithSuspense>
+        )
       },
       {
         path: "profile",

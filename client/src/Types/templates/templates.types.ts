@@ -3,7 +3,7 @@ import { ILikes } from "../likes/likes.types";
 import { ITags } from "../tags/tags.types";
 import { IUser, IUserInfo } from "../user/user.types";
 
-export type QuestionType = "text" | "textarea" | "number" | "checkbox" | "multiple-choice";
+export type QuestionType = "text" | "textarea" | "number" | "checkbox";
 
 export interface ICreateTemplate {
     title: string;
