@@ -10,7 +10,7 @@ A fullstack web application where one can create his own forms, fill up others' 
 - **Backend**
     - NestJS
     - JWT authentication
-    - Postgres
+    - TypeOrm
 - **Database**
     - PostgreSQL
 
